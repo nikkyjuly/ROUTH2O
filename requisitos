@@ -1,0 +1,96 @@
+ROUTHH2O - Hidratação de Precisão
+
+    Documento: DRF-RTH2O-001 Versão: 1.0 Status: Especificação Inicial Autor: Analista de Requisitos (AI)
+
+1. Contexto
+
+    Problema: A desidratação silenciosa em atletas amadores e entusiastas de atividades físicas, que muitas vezes só ingerem água ao sentir sede (sinal tardio), resultando em queda de performance e estagnação metabólica.
+
+    Usuários: * Atleta/Usuário Comum: Realiza as atividades, recebe alertas e gerencia seu perfil.
+
+        Profissional (Médico/Nutricionista/Treinador): Acompanha relatórios de desempenho e hidratação mediante autorização.
+
+    Valor: Transformar dados complexos de sensores (GPS, inclinação, esforço) em orientações práticas de hidratação em tempo real, promovendo saúde, emagrecimento e performance sustentável.
+
+2. Requisitos Funcionais (RF)
+RF01 - Perfil Biométrico do Usuário
+
+Descrição: O sistema deve coletar e armazenar dados do usuário para calibrar o algoritmo metabólico. Regras:
+
+    Campos obrigatórios: Peso, Altura, Idade, Sexo, Nível de Condicionamento e meta de ingestão diária de água. Critério de Aceite:
+
+    [ ] Validar se todos os campos estão preenchidos antes de liberar o primeiro treino.
+
+RF02 - Seleção de Modalidade Esportiva
+
+Descrição: O usuário deve selecionar o tipo de atividade antes de iniciar o monitoramento. Regras:
+
+    Opções: Academia, Corrida, Caminhada e Ciclismo.
+
+    O sistema deve ajustar o cálculo de queima calórica e perda de líquidos com base na modalidade. Critério de Aceite:
+
+    [ ] Botão de "Iniciar Atividade" deve exigir a escolha de uma modalidade.
+
+RF03 - Monitoramento e Recálculo Dinâmico (Offline First)
+
+Descrição: O app deve monitorar GPS e inclinação do terreno em tempo real via smartphone, operando sem necessidade de internet. Regras:
+
+    O sistema deve recalcular a necessidade de água a cada 1 km percorrido.
+
+    O cálculo deve considerar a inclinação acumulada no quilômetro anterior para aumentar a dose de hidratação. Critério de Aceite:
+
+    [ ] O app deve registrar a rota e inclinação sem conexão 4G/5G.
+
+RF04 - Alertas Sonoros Inteligentes
+
+Descrição: Notificar o usuário sobre o momento exato e a quantidade de água a ser ingerida. Regras:
+
+    O alerta deve ser emitido via áudio (ex: "Beba 250ml agora").
+
+    O intervalo é determinado pelo algoritmo de esforço e quilometragem. Critério de Aceite:
+
+    [ ] O alerta deve disparar mesmo com a tela do smartphone bloqueada.
+
+RF05 - Gamificação (Pontos e Medalhas)
+
+Descrição: Bonificar o usuário por metas atingidas. Regras:
+
+    Conceder pontos por: completar o trajeto, seguir todos os alertas de água e bater recordes pessoais.
+
+    Medalhas visuais devem ser exibidas no perfil. Critério de Aceite:
+
+    [ ] Lista de medalhas bloqueadas e desbloqueadas visível no perfil.
+
+RF06 - Relatórios Preditivos e Retroativos
+
+Descrição: Gerar análises antes e depois da atividade. Regras:
+
+    Pré-treino: Estimativa de água necessária com base na rota planejada.
+
+    Pós-treino: Relatório de eficiência metabólica e perda hídrica real vs. sugerida. Critério de Aceite:
+
+    [ ] Visualização de gráfico de esforço vs. hidratação ao final da sessão.
+
+RF07 - Compartilhamento com Profissionais
+
+Descrição: Permitir que terceiros autorizados visualizem os dados de saúde. Regras:
+
+    O acesso só é liberado após o usuário aceitar formalmente um pedido de conexão/permissão no app. Critério de Aceite:
+
+    [ ] Registro de log de quando a permissão foi concedida ou revogada.
+
+3. Regras de Negócio (RN)
+
+    RN01: O cálculo de hidratação deve ser atualizado obrigatoriamente a cada 1km em atividades de deslocamento.
+
+    RN02: Em modo "Academia" (estático), o alerta deve ser baseado em tempo e intensidade estimada, já que não há deslocamento por GPS.
+
+    RN03: O usuário pode revogar o acesso de um profissional aos seus dados a qualquer momento.
+
+4. Requisitos Não-Funcionais (RNF)
+
+    Segurança/Privacidade: Os dados biométricos devem ser tratados conforme a LGPD; a conexão entre profissional e usuário deve ser criptografada.
+
+    Disponibilidade: O núcleo de cálculo do app deve ser 100% funcional em modo offline.
+
+    Usabilidade: Interface de alta visibilidade e botões grandes para facilitar o uso durante o exercício.
