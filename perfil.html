@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ROUTH2O - Perfil Completo</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <main>
+        <section id="configuracoes-usuario">
+            <h2>Cadastro de Bio-rastreamento</h2>
+            <form action="/salvar_perfil" method="POST" enctype="multipart/form-data">
+                
+                <fieldset>
+                    <legend>Identificação e Biometria</legend>
+                    
+                    <label for="foto-perfil">Foto do Perfil:</label>
+                    <input type="file" id="foto-perfil" name="foto-perfil" accept="image/*">
+
+                    <label for="nascimento">Data de Nascimento:</label>
+                    <input type="date" id="nascimento" name="nascimento" required>
+
+                    <label for="peso">Peso Atual (kg):</label>
+                    <input type="number" step="0.1" id="peso" name="peso" placeholder="Ex: 75.5" required>
+                </fieldset>
+
+                <fieldset>
+                    <legend>Metas e Saúde</legend>
+                    
+                    <p>Qual seu objetivo principal?</p>
+                    <label><input type="radio" name="objetivo" value="emagrecimento" checked> Emagrecimento</label>
+                    <label><input type="radio" name="objetivo" value="performance"> Performance</label>
+                    <label><input type="radio" name="objetivo" value="saude"> Saúde Geral</label>
+
+                    <label for="obs-medicas">Observações Médicas ou Alergias:</label>
+                    <textarea id="obs-medicas" name="obs-medicas" rows="4" placeholder="Informe condições de saúde relevantes..."></textarea>
+                </fieldset>
+
+                <fieldset>
+                    <legend>Privacidade</legend>
+                    <label>
+                        <input type="checkbox" id="termos" name="termos" required> 
+                        Aceito o processamento dos meus dados biométricos conforme a LGPD.
+                    </label>
+                </fieldset>
+
+                <button type="submit">Atualizar Perfil</button>
+            </form>
+        </section>
+    </main>
+</body>
+</html>
