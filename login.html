@@ -6,31 +6,31 @@
     <title>ROUTH2O - Login</title>
     <link rel="stylesheet" href="style.css">
 </head>
-<body>
-    <header id="cabecalho-login">
-        <h1>ROUTH2O</h1>
-        <p>Hidratação de Precisão para sua Performance</p>
-    </header>
+<body class="corpo-pagina">
+    <main class="container-central">
+        <header class="cabecalho-principal">
+            <h1>ROUTH2O</h1>
+            <p>Sua performance em tempo real</p>
+        </header>
 
-    <main id="conteudo-login">
-        <section class="area-login">
-            <h2>Acesse sua conta</h2>
-            <form id="form-login" action="/perfil.html" method="POST">
-                <div class="campo-form">
-                    <label for="email">E-mail:</label>
-                    <input type="email" id="email" name="email" required>
+        <section class="cartao-login">
+            <form action="treino.html" class="formulario-padrao">
+                <div class="grupo-input">
+                    <label for="usuario">Usuário:</label>
+                    <input type="text" id="usuario" name="usuario" class="campo-texto" required>
                 </div>
-                <div class="campo-form">
+
+                <div class="grupo-input">
                     <label for="senha">Senha:</label>
-                    <input type="password" id="senha" name="senha" required>
+                    <input type="password" id="senha" name="senha" class="campo-texto" required>
                 </div>
-                <button type="submit" id="btn-entrar">Entrar</button>
+
+                <button type="submit" class="botao-primario">Entrar</button>
             </form>
+            <div class="links-auxiliares">
+                <a href="#" class="link-suave">Esqueci minha senha</a>
+            </div>
         </section>
     </main>
-
-    <footer id="rodape-login">
-        <p>&copy; 2026 ROUTH2O. Todos os direitos reservados.</p>
-    </footer>
 </body>
 </html>

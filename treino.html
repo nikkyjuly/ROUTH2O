@@ -3,43 +3,38 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ROUTH2O - Monitoramento de Treino</title>
+    <title>ROUTH2O - Treino Ativo</title>
     <link rel="stylesheet" href="style.css">
 </head>
-<body>
-    <header>
-        <h1>ROUTH2O - Treino Ativo</h1>
-        <nav>
-            <a href="perfil.html">Voltar ao Perfil</a>
-        </nav>
-    </header>
+<body class="corpo-pagina">
+    <nav class="menu-navegacao">
+        <ul class="lista-navegacao">
+            <li><a href="perfil.html" class="item-menu">Meu Perfil</a></li>
+            <li><a href="relatorios.html" class="item-menu">Histórico</a></li>
+            <li><a href="login.html" class="item-menu">Sair</a></li>
+        </ul>
+    </nav>
 
-    <main id="conteudo-treino">
-        <section id="selecao-modalidade">
-            <h2>Selecione a Modalidade (RF02)</h2>
-            <form id="form-modalidade">
-                <label><input type="radio" name="modalidade" value="academia" required> Academia</label>
-                <label><input type="radio" name="modalidade" value="corrida"> Corrida</label>
-                <label><input type="radio" name="modalidade" value="caminhada"> Caminhada</label>
-                <label><input type="radio" name="modalidade" value="ciclismo"> Ciclismo</label>
-                
-                <button type="button" id="btn-iniciar-treino">Iniciar Atividade</button>
-            </form>
+    <main class="container-treino">
+        <header class="cabecalho-sessao">
+            <h2 class="titulo-performance">Monitoramento em Tempo Real</h2>
+        </header>
+
+        <section class="card-monitoramento" id="painel-monitoramento">
+            <div class="bloco-dados-gps">
+                <h3 class="subtitulo-dados">Dados GPS</h3>
+                <p class="leitura-metrica">Distância: <span id="distancia-percorrida" class="valor-destaque">0.00 km</span></p>
+                <p class="leitura-metrica">Inclinação: <span id="inclinacao-terreno" class="valor-destaque">0%</span></p>
+            </div>
+
+            <div class="alerta-hidratacao-card">
+                <h3 class="titulo-alerta">💧 Alerta de Hidratação</h3>
+                <p class="texto-alerta">Hora de beber 200ml de água!</p>
+            </div>
         </section>
 
-        <section id="painel-monitoramento" style="display: none;">
-            <h2>Status do Treino (RF03 / RF04)</h2>
-            <article class="dados-gps">
-                <h3>Dados de Deslocamento</h3>
-                <p>Distância: <span id="distancia-percorrida">0</span> km</p>
-                <p>Inclinação Atual: <span id="inclinacao-terreno">0</span>°</p>
-            </article>
-
-            <article class="alerta-hidratacao">
-                <h3>Hidratação</h3>
-                <p id="mensagem-alerta">Monitorando metabolismo...</p>
-                <button id="btn-confirmar-ingestao" disabled>Confirmar Ingestão de Água</button>
-            </article>
+        <section class="acoes-treino">
+            <button type="button" class="botao-perigo">Encerrar Treino</button>
         </section>
     </main>
 </body>

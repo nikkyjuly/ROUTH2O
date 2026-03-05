@@ -6,44 +6,47 @@
     <title>ROUTH2O - Relatórios</title>
     <link rel="stylesheet" href="style.css">
 </head>
-<body>
-    <header>
-        <h1>Análise de Performance</h1>
-    </header>
+<body class="corpo-pagina">
+    <nav class="menu-navegacao">
+        <ul class="lista-navegacao">
+            <li><a href="perfil.html" class="item-menu">Perfil</a></li>
+            <li><a href="treino.html" class="item-menu">Novo Treino</a></li>
+            <li><a href="login.html" class="item-menu">Sair</a></li>
+        </ul>
+    </nav>
 
-    <main>
-        <section id="filtros-relatorio">
-            <fieldset>
-                <legend>Filtrar Histórico</legend>
-                <form>
-                    <label for="data-inicio">De:</label>
-                    <input type="date" id="data-inicio" name="data-inicio">
+    <main class="container-relatorios">
+        <h2 class="titulo-secao">Histórico de Performance</h2>
+        
+        <div class="tabela-responsiva">
+            <table class="tabela-dados">
+                <thead class="cabecalho-tabela">
+                    <tr>
+                        <th class="coluna-id">ID</th>
+                        <th class="coluna-data">Data</th>
+                        <th class="coluna-dist">Distância</th>
+                        <th class="coluna-status">Status</th>
+                    </tr>
+                </thead>
+                <tbody class="corpo-tabela">
+                    <tr class="linha-dado">
+                        <td>001</td>
+                        <td>01/03/2026</td>
+                        <td>5.4 km</td>
+                        <td><span class="badge-sucesso">Concluído</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
 
-                    <label for="data-fim">Até:</label>
-                    <input type="date" id="data-fim" name="data-fim">
-
-                    <button type="button">Gerar Gráfico</button>
-                </form>
-            </fieldset>
-        </section>
-
-        <section id="compartilhamento-profissional">
-            <article>
-                <h3>Autorizar Profissional (RF07)</h3>
-                <form action="/autorizar" method="POST">
-                    <label for="tipo-profissional">Tipo de Profissional:</label>
-                    <select id="tipo-profissional" name="tipo-profissional">
-                        <option value="nutricionista">Nutricionista</option>
-                        <option value="medico">Médico(a)</option>
-                        <option value="treinador">Treinador(a)</option>
-                    </select>
-
-                    <label for="id-profissional">Código/ID do Profissional:</label>
-                    <input type="text" id="id-profissional" name="id-profissional" placeholder="Ex: CRM-12345">
-
-                    <button type="submit">Conceder Acesso</button>
-                </form>
-            </article>
+        <section class="detalhes-adicionais">
+            <details class="acordeao-info">
+                <summary class="titulo-acordeao">Ver detalhes técnicos do GPS</summary>
+                <ul class="lista-detalhes">
+                    <li class="item-lista">Precisão: 3 metros</li>
+                    <li class="item-lista">Satélites: 8 ativos</li>
+                </ul>
+            </details>
         </section>
     </main>
 </body>

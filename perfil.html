@@ -3,51 +3,45 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ROUTH2O - Perfil Completo</title>
+    <title>ROUTH2O - Perfil</title>
     <link rel="stylesheet" href="style.css">
 </head>
-<body>
-    <main>
-        <section id="configuracoes-usuario">
-            <h2>Cadastro de Bio-rastreamento</h2>
-            <form action="/salvar_perfil" method="POST" enctype="multipart/form-data">
+<body class="corpo-pagina">
+    <nav class="menu-navegacao">
+        <ul class="lista-navegacao">
+            <li><a href="treino.html" class="item-menu">Treino</a></li>
+            <li><a href="relatorios.html" class="item-menu">Relatórios</a></li>
+            <li><a href="login.html" class="item-menu">Sair</a></li>
+        </ul>
+    </nav>
+
+    <main class="conteudo-restrito">
+        <h2 class="titulo-secao">Configurações de Bio-rastreamento</h2>
+        
+        <form action="#" class="formulario-avancado">
+            <fieldset class="painel-agrupador">
+                <legend class="legenda-painel">Dados Biométricos</legend>
                 
-                <fieldset>
-                    <legend>Identificação e Biometria</legend>
-                    
-                    <label for="foto-perfil">Foto do Perfil:</label>
-                    <input type="file" id="foto-perfil" name="foto-perfil" accept="image/*">
+                <label for="foto" class="rotulo-campo">Foto:</label>
+                <input type="file" id="foto" class="campo-arquivo">
 
-                    <label for="nascimento">Data de Nascimento:</label>
-                    <input type="date" id="nascimento" name="nascimento" required>
+                <label for="nascimento" class="rotulo-campo">Nascimento:</label>
+                <input type="date" id="nascimento" class="campo-data">
+            </fieldset>
 
-                    <label for="peso">Peso Atual (kg):</label>
-                    <input type="number" step="0.1" id="peso" name="peso" placeholder="Ex: 75.5" required>
-                </fieldset>
+            <fieldset class="painel-agrupador">
+                <legend class="legenda-painel">Objetivos</legend>
+                <div class="opcoes-selecao">
+                    <label class="rotulo-radio"><input type="radio" name="obj" value="1"> Emagrecer</label>
+                    <label class="rotulo-radio"><input type="radio" name="obj" value="2"> Ganho Muscular</label>
+                </div>
 
-                <fieldset>
-                    <legend>Metas e Saúde</legend>
-                    
-                    <p>Qual seu objetivo principal?</p>
-                    <label><input type="radio" name="objetivo" value="emagrecimento" checked> Emagrecimento</label>
-                    <label><input type="radio" name="objetivo" value="performance"> Performance</label>
-                    <label><input type="radio" name="objetivo" value="saude"> Saúde Geral</label>
+                <label for="bio" class="rotulo-campo">Bio/Observações:</label>
+                <textarea id="bio" class="area-texto" rows="3"></textarea>
+            </fieldset>
 
-                    <label for="obs-medicas">Observações Médicas ou Alergias:</label>
-                    <textarea id="obs-medicas" name="obs-medicas" rows="4" placeholder="Informe condições de saúde relevantes..."></textarea>
-                </fieldset>
-
-                <fieldset>
-                    <legend>Privacidade</legend>
-                    <label>
-                        <input type="checkbox" id="termos" name="termos" required> 
-                        Aceito o processamento dos meus dados biométricos conforme a LGPD.
-                    </label>
-                </fieldset>
-
-                <button type="submit">Atualizar Perfil</button>
-            </form>
-        </section>
+            <button type="submit" class="botao-sucesso">Salvar Alterações</button>
+        </form>
     </main>
 </body>
 </html>
