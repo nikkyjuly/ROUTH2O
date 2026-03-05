@@ -1,12 +1,17 @@
+/* ============================================================
+   ROUTH2O - STYLE.CSS
+   Tema: Azul Oceano & Alta Performance (Neon)
+   ============================================================ */
+
 /* 1. RESET E FUNDAMENTOS (Box Model) */
-* {
+*, *::before, *::after {
     margin: 0;
     padding: 0;
-    box-sizing: border-box; /* Essencial conforme aula teórica */
+    box-sizing: border-box; /* Previne quebras de layout por padding/border */
 }
 
 .corpo-pagina {
-    font-family: Arial, sans-serif;
+    font-family: 'Segoe UI', Arial, sans-serif;
     line-height: 1.6;
     background-color: #f4f9f9;
     color: #333;
@@ -23,25 +28,27 @@
 
 .lista-navegacao {
     list-style: none;
-    display: flex; /* Introdução ao Flexbox */
+    display: flex;
     justify-content: center;
     gap: 20px;
 }
 
 .item-menu {
-    color: white;
+    color: #ffffff;
     text-decoration: none;
     font-weight: bold;
+    transition: color 0.3s;
 }
 
 .item-menu:hover {
+    color: #f4f9f9;
     text-decoration: underline;
 }
 
 /* 3. ESTRUTURA E TÍTULOS */
 .cabecalho-principal, .cabecalho-sessao {
     background-color: #0077be;
-    color: white;
+    color: #ffffff;
     padding: 1.5rem;
     text-align: center;
     border-radius: 8px;
@@ -53,16 +60,16 @@ h1, h2, .titulo-performance {
 }
 
 .cabecalho-principal h1 {
-    color: white; /* Contraste no cabeçalho azul */
+    color: #ffffff; /* Contraste garantido no cabeçalho azul */
 }
 
-/* 4. FORMULÁRIOS (Seletores de Classe) */
+/* 4. FORMULÁRIOS E INPUTS */
 .painel-agrupador {
     border: 2px solid #0077be;
     border-radius: 5px;
     margin-bottom: 15px;
     padding: 15px;
-    background-color: white;
+    background-color: #ffffff;
 }
 
 .legenda-painel {
@@ -77,46 +84,56 @@ h1, h2, .titulo-performance {
     font-weight: bold;
 }
 
-.campo-texto, .campo-data, .campo-arquivo, .area-texto, select {
+.campo-texto, .campo-data, .area-texto, select {
     width: 100%;
     padding: 8px;
     margin-top: 5px;
     border: 1px solid #ccc;
     border-radius: 4px;
+    font-family: inherit;
+}
+
+/* Correção específica para o input de arquivo */
+.campo-arquivo {
+    width: 100%;
+    padding: 10px;
+    background: #ffffff;
+    border: 1px dashed #0077be;
+    cursor: pointer;
+    min-height: 40px; /* Evita o corte da legenda nativa */
+    border-radius: 4px;
+    margin-top: 5px;
 }
 
 /* 5. BOTÕES */
-.botao-primario, .botao-sucesso {
-    background-color: #28a745;
-    color: white;
+.botao-primario, .botao-sucesso, .botao-perigo {
+    color: #ffffff;
     border: none;
     padding: 12px 20px;
     font-size: 16px;
     border-radius: 5px;
     cursor: pointer;
-    margin-top: 15px;
     width: 100%;
-    transition: background 0.3s;
+    transition: filter 0.3s ease;
+}
+
+.botao-primario, .botao-sucesso {
+    background-color: #28a745;
+    margin-top: 15px;
 }
 
 .botao-perigo {
     background-color: #dc3545;
-    color: white;
-    border: none;
-    padding: 12px 20px;
-    border-radius: 5px;
-    cursor: pointer;
-    width: 100%;
 }
 
-button:hover {
+button:hover, .botao-primario:hover, .botao-sucesso:hover, .botao-perigo:hover {
     filter: brightness(90%);
 }
 
-/* 6. PAINEL DE MONITORAMENTO (Específico) */
+/* 6. PAINEL DE MONITORAMENTO (Estética Neon) */
 .card-monitoramento {
     background-color: #1a1a1a;
-    color: #00ff00; /* Verde neon */
+    color: #00ff00; /* Verde neon GPS */
     padding: 25px;
     border-radius: 15px;
     text-align: center;
@@ -149,22 +166,31 @@ button:hover {
 }
 
 @keyframes pulsar {
-    0% { opacity: 1; }
-    50% { opacity: 0.7; }
-    100% { opacity: 1; }
+    0% { opacity: 1; box-shadow: 0 0 5px rgba(0, 77, 122, 0.5); }
+    50% { opacity: 0.7; box-shadow: 0 0 15px rgba(0, 119, 190, 0.8); }
+    100% { opacity: 1; box-shadow: 0 0 5px rgba(0, 77, 122, 0.5); }
 }
 
-/* 8. TABELAS (Relatórios) */
+/* 8. TABELAS (Relatórios e Histórico) */
+.tabela-responsiva {
+    width: 100%;
+    overflow-x: auto; /* Scroll horizontal em telas menores */
+    -webkit-overflow-scrolling: touch;
+    margin-top: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
 .tabela-dados {
     width: 100%;
+    min-width: 600px; /* Previne esmagamento de colunas no mobile */
     border-collapse: collapse;
-    background: white;
-    margin-top: 20px;
+    background: #ffffff;
 }
 
 .cabecalho-tabela th {
     background-color: #0077be;
-    color: white;
+    color: #ffffff;
     padding: 12px;
 }
 
@@ -176,8 +202,80 @@ button:hover {
 
 .badge-sucesso {
     background: #28a745;
-    color: white;
+    color: #ffffff;
     padding: 4px 8px;
     border-radius: 4px;
     font-size: 0.8rem;
+}
+
+/* ============================================================
+   9. BREAKPOINTS E RESPONSIVIDADE
+   ============================================================ */
+
+/* MOBILE (Até 767px) */
+@media screen and (max-width: 767px) {
+    .corpo-pagina {
+        padding: 10px;
+    }
+    
+    .lista-navegacao {
+        flex-direction: column; /* Menu empilhado */
+        align-items: center;
+        gap: 10px;
+    }
+
+    .lista-navegacao li, .item-menu {
+        width: 100%;
+        text-align: center;
+        display: block;
+    }
+
+    .valor-destaque {
+        font-size: 1.8rem; /* Ajuste do neon para telas menores */
+    }
+}
+
+/* TABLET (768px a 1023px) */
+@media screen and (min-width: 768px) and (max-width: 1023px) {
+    .formulario-avancado {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+        align-items: start;
+    }
+
+    .botao-sucesso {
+        grid-column: 1 / -1; /* Força o botão a ocupar todas as colunas disponíveis */
+    }
+}
+
+/* DESKTOP (1024px ou mais) */
+@media screen and (min-width: 1024px) {
+    .container-treino, .conteudo-restrito, .cabecalho-principal {
+        max-width: 1000px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .card-monitoramento {
+        flex-direction: row; /* Coloca o GPS e o Alerta lado a lado */
+        justify-content: space-around;
+        align-items: center;
+    }
+
+    .alerta-hidratacao-card {
+        margin-top: 0;
+        width: 300px;
+    }
+    
+    /* Expansão do Grid do formulário para Desktop, se necessário */
+    .formulario-avancado {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+    }
+    
+    .botao-sucesso {
+        grid-column: 1 / -1;
+    }
 }
