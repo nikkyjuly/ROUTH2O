@@ -30,3 +30,38 @@ Abaixo estão as principais propriedades manipuladas durante o desenvolvimento d
 
 ## 4. Box Model (Modelo de Caixa)
 Entender o Box Model é crucial para o layout. Todo elemento HTML é visto como uma caixa composta por: **Conteúdo** (Content), **Preenchimento** (Padding), **Borda** (Border) e **Margem** (Margin). O ajuste independente dessas camadas permite o controle total sobre o posicionamento e o tamanho dos elementos na tela.
+
+-----------------------------------------------------------------------
+
+Aprendizado e Validação: Responsividade no Projeto ROUTH2O
+1. A Tag Meta Viewport
+Durante a preparação do ambiente, verifiquei a presença da tag <meta name="viewport" content="width=device-width, initial-scale=1.0"> no <head> de todos os arquivos HTML. Conforme a teoria, essa tag é vital porque:
+
+Informa ao navegador que a largura do conteúdo deve seguir a largura real da tela do dispositivo (device-width).
+
+Define o nível de zoom inicial como 1.0, impedindo que o navegador renderize o site em uma escala reduzida e ilegível.
+
+2. Media Queries: min-width vs max-width
+Com base na consulta ao MDN Web Docs, apliquei a regra @media para criar estilos condicionais.
+
+max-width: Utilizado para definir estilos que se aplicam até um limite máximo (ex: estilos específicos para mobile até 767px).
+
+min-width: Utilizado para definir estilos que começam a valer a partir de uma largura mínima (ex: expandir o layout para desktop a partir de 1024px).
+
+Adotamos a estratégia Mobile-First, onde o CSS base é focado em telas menores e as Media Queries expandem o design para telas maiores.
+
+3. Definição de Breakpoints
+O projeto foi adaptado utilizando três pontos de quebra principais para garantir uma boa experiência de navegação:
+
+Mobile (Até 767px): Menu em coluna e tabelas com rolagem lateral para evitar quebras de layout.
+
+Tablet (768px a 1023px): Uso de Grid Layout para organizar formulários em duas colunas.
+
+Desktop (1024px ou mais): Layout centralizado com max-width e elementos distribuídos horizontalmente com Flexbox.
+
+4. Ferramentas de Desenvolvedor e Validação
+Para validar as soluções, utilizei o Inspecionar Elemento do navegador (DevTools):
+
+Ativei a Barra de Ferramentas de Dispositivo para simular diferentes resoluções em tempo real.
+
+Identifiquei e corrigi um bug de estouro na tabela de relatórios através do comando overflow-x: auto e um bug de corte no input de fotos através da propriedade min-height.
