@@ -279,3 +279,31 @@ button:hover, .botao-primario:hover, .botao-sucesso:hover, .botao-perigo:hover {
         grid-column: 1 / -1;
     }
 }
+/* Esconde o botão no computador, ele só aparece no celular */
+#btn-menu {
+    display: none;
+    background: none;
+    border: 1px solid white;
+    color: white;
+    padding: 5px 10px;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+@media screen and (max-width: 767px) {
+    #btn-menu {
+        display: block; /* Mostra o botão no celular */
+        margin: 0 auto 10px;
+    }
+
+    .lista-navegacao {
+        display: none; /* Esconde a lista por padrão no celular */
+        flex-direction: column;
+        text-align: center;
+    }
+
+    /* Classe que o JavaScript vai "ligar" */
+    .lista-navegacao.menu-ativo {
+        display: flex; 
+    }
+}
