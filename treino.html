@@ -8,8 +8,10 @@
 </head>
 <body class="corpo-pagina">
     <nav class="menu-navegacao">
-        <ul class="lista-navegacao">
+        <button id="btn-menu" class="botao-menu-mobile">☰ Menu</button>
+        <ul class="lista-navegacao" id="menu-lista">
             <li><a href="perfil.html" class="item-menu">Meu Perfil</a></li>
+            <li><a href="atividade_dom.html" class="item-menu">Laboratório</a></li>
             <li><a href="relatorios.html" class="item-menu">Histórico</a></li>
             <li><a href="login.html" class="item-menu">Sair</a></li>
         </ul>
@@ -34,8 +36,10 @@
         </section>
 
         <section class="acoes-treino">
-            <button type="button" class="botao-perigo">Encerrar Treino</button>
+            <button type="button" id="btn-iniciar" class="botao-sucesso">Iniciar Treino</button>
+            <button type="button" id="btn-encerrar" class="botao-perigo">Encerrar Treino</button>
         </section>
     </main>
+    <script src="script.js"></script>
 </body>
 </html>

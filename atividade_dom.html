@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ROUTH2O - Atividade DOM</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="corpo-pagina">
+    <!-- Menu incluído para evitar erros no script.js existente -->
+    <nav class="menu-navegacao">
+        <button id="btn-menu" class="botao-menu-mobile">☰ Menu</button>
+        <ul class="lista-navegacao" id="menu-lista">
+            <li><a href="perfil.html" class="item-menu">Perfil</a></li>
+            <li><a href="atividade_dom.html" class="item-menu">Laboratório</a></li>
+            <li><a href="treino.html" class="item-menu">Treino</a></li>
+            <li><a href="relatorios.html" class="item-menu">Relatórios</a></li>
+        </ul>
+    </nav>
+
+    <main class="conteudo-restrito">
+        <h2 class="titulo-secao">Laboratório</h2>
+
+        <!-- Desafio 1: Cálculo de Hidratação -->
+        <section class="painel-agrupador">
+            <legend class="legenda-painel">Calculadora de Hidratação</legend>
+            
+            <label for="km-input" class="rotulo-campo">Distância Percorrida (km):</label>
+            <input type="number" id="km-input" class="campo-texto" placeholder="Ex: 5">
+            
+            <button id="btn-calcular-hidratacao" class="botao-primario" style="margin-top: 10px;">
+                Calcular Meta
+            </button>
+
+            <p id="resultado-hidratacao" style="margin-top: 15px; font-weight: bold; color: #005a8e;"></p>
+        </section>
+
+        <!-- Desafio 2: Dica Secreta -->
+        <section class="painel-agrupador" style="margin-top: 20px;">
+            <legend class="legenda-painel">Curiosidades de Performance</legend>
+            
+            <button id="btn-dica" class="botao-sucesso">
+                Ver Dica do Dia
+            </button>
+
+            <p id="texto-dica" style="display: none; margin-top: 15px; padding: 10px; background: #eef; border-left: 4px solid #0077be;">
+                A desidratação silenciosa ocorre quando você perde até 2% do peso corporal em água sem sentir sede imediata, o que pode reduzir sua performance cognitiva e física em até 20%.
+            </p>
+        </section>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>
