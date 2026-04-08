@@ -3,35 +3,79 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ROUTH2O - Login</title>
+    <title>ROUTH2O - Autenticação</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body class="corpo-pagina">
-    <main class="container-central">
+    <main class="container-central" style="max-width: 500px; margin: 40px auto;">
         <header class="cabecalho-principal">
             <h1>ROUTH2O</h1>
             <p>Sua performance em tempo real</p>
         </header>
 
-        <section class="cartao-login">
-            <form action="treino.html" class="formulario-padrao">
+        <div style="display: flex; margin-bottom: 20px; border-radius: 5px; overflow: hidden;">
+            <button id="aba-login" class="botao-primario" style="margin: 0; border-radius: 0; width: 50%; background-color: #0077be;">Acessar</button>
+            <button id="aba-cadastro" class="botao-sucesso" style="margin: 0; border-radius: 0; width: 50%; background-color: #555;">Criar Conta</button>
+        </div>
+
+        <section class="cartao-login" id="sessao-login">
+            <h2 style="text-align: center; color: #005a8e; margin-bottom: 20px;">Bem-vindo de volta!</h2>
+            <form id="form-login" class="formulario-padrao">
                 <div class="grupo-input">
-                    <label for="usuario">Usuário:</label>
-                    <input type="text" id="usuario" name="usuario" class="campo-texto" required>
+                    <label for="login-email">E-mail:</label>
+                    <input type="email" id="login-email" class="campo-texto" required>
                 </div>
 
                 <div class="grupo-input">
-                    <label for="senha">Senha:</label>
-                    <input type="password" id="senha" name="senha" class="campo-texto" required>
+                    <label for="login-senha">Senha:</label>
+                    <input type="password" id="login-senha" class="campo-texto" required>
                 </div>
 
-                <button type="submit" class="botao-primario">Entrar</button>
+                <button type="submit" class="botao-primario">Entrar no Sistema</button>
             </form>
-            <div class="links-auxiliares">
-                <a href="#" class="link-suave">Esqueci minha senha</a>
-            </div>
         </section>
+
+        <section class="cartao-login" id="sessao-cadastro" style="display: none;">
+            <h2 style="text-align: center; color: #dc3545; margin-bottom: 20px;">Sobreviva para Registrar-se</h2>
+            <form id="form-cadastro" class="formulario-padrao">
+                
+                <div class="grupo-input">
+                    <label for="caos-nome">Nome (Teclado Descalibrado):</label>
+                    <input type="text" id="caos-nome" class="campo-texto" placeholder="dIgItE sEu nOmE..." required autocomplete="off">
+                </div>
+
+                <div class="grupo-input">
+                    <label>E-mail Corporativo:</label>
+                    <div style="display: flex; gap: 10px; align-items: center;">
+                        <input type="text" id="caos-email-user" class="campo-texto" placeholder="usuario" required style="width: 50%;">
+                        <span>@</span>
+                        <select id="caos-email-dominio" class="campo-texto" style="width: 50%;">
+                            <option value="agua-de-salsicha.com">agua-de-salsicha.com</option>
+                            <option value="esqueci-meu-nome.net">esqueci-meu-nome.net</option>
+                            <option value="email-falso.org">email-falso.org</option>
+                            <option value="routh2o.com.br">routh2o.com.br</option>
+                            <option value="bol.com.br">bol.com.br</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="grupo-input">
+                    <label for="caos-senha">Senha (Obrigatório conter a palavra "agua"):</label>
+                    <input type="text" id="caos-senha" class="campo-texto" placeholder="Todos estão vendo sua senha..." required autocomplete="off">
+                </div>
+
+                <div style="position: relative; height: 60px; margin-top: 30px;" id="area-botao-caos">
+                    <button type="button" id="btn-salvar-caos" class="botao-perigo" style="position: absolute; width: 100%; transition: transform 0.15s ease-out; z-index: 10;">
+                        Tentar Criar Conta
+                    </button>
+                </div>
+            </form>
+        </section>
+
     </main>
+
     <script src="script.js"></script>
+    <script src="db.js"></script>
+    <script src="controller.js"></script>
 </body>
 </html>
