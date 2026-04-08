@@ -196,4 +196,76 @@ if (sessaoLogin && sessaoCadastro) {
         if (fugasConta < 10) return; // Evita que o usuário clique com o teclado antes da hora
 
         const nome = inputNomeCaos.value;
-        const emailUser
+        const emailUser = document.getElementById('caos-email-user').value;
+        const emailDominio = document.getElementById('caos-email-dominio').value;
+        const senha = inputSenhaCaos.value;
+
+        if (!nome || !emailUser || !senha) {
+            alert("Preencha tudo se quiser sobreviver!");
+            return;
+        }
+
+        if (!senha.toLowerCase().includes("agua")) {
+            alert('REGRA VIOLADA: A senha precisa conter a palavra "agua" (ex: 123agua456)!');
+            return;
+        }
+
+        const emailCompleto = `${emailUser}@${emailDominio}`;
+
+        // Objeto que vai para o IndexedDB
+        const novaConta = {
+            tipo: "Conta_Autenticacao",
+            nome: nome,
+            email: emailCompleto,
+            senha: senha,
+            dataCriacao: new Date().toLocaleDateString()
+        };
+
+        try {
+            await adicionarItem(novaConta);
+            alert(`Sobrevivente registrado com sucesso!\nConta criada para: ${emailCompleto}\n\nVocê será levado ao Login.`);
+            
+            // Reseta a zoeira e o formulário
+            document.getElementById('form-cadastro').reset();
+            fugasConta = 0;
+            btnSalvarContaCaos.style.backgroundColor = "#dc3545";
+            btnSalvarContaCaos.textContent = "Tentar Criar Conta";
+            
+            // Volta para a aba de Login
+            btnAbaLogin.click(); 
+            listarDados(); // Mostra no console
+        } catch (erro) {
+            console.error("Erro ao criar conta:", erro);
+        }
+    });
+
+    // 6. LOGIN REAL (Verificar no DB)
+    const formLogin = document.getElementById('form-login');
+    formLogin.addEventListener('submit', async (event) => {
+        event.preventDefault(); // Impede a página de recarregar
+        
+        const emailDigitado = document.getElementById('login-email').value;
+        const senhaDigitada = document.getElementById('login-senha').value;
+
+        try {
+            // Puxa TODOS os dados do banco
+            const dadosBanco = await buscarItens();
+            
+            // Filtra apenas os registros que são Contas de Usuário
+            const contas = dadosBanco.filter(item => item.tipo === "Conta_Autenticacao");
+            
+            // Procura se existe algum usuário com o e-mail E senha idênticos
+            const usuarioValido = contas.find(conta => conta.email === emailDigitado && conta.senha === senhaDigitada);
+
+            if (usuarioValido) {
+                alert(`Acesso Liberado! Bem-vindo(a), ${usuarioValido.nome}!`);
+                window.location.href = "treino.html"; // Redireciona para o painel principal
+            } else {
+                alert("Acesso Negado! E-mail ou senha incorretos.\nSerá que você não precisa criar uma conta primeiro?");
+            }
+
+        } catch (erro) {
+            console.error("Erro ao verificar credenciais:", erro);
+        }
+    });
+}
