@@ -1,309 +1,99 @@
-/* ============================================================
-   ROUTH2O - STYLE.CSS
-   Tema: Azul Oceano & Alta Performance (Neon)
-   ============================================================ */
+/* style.css — visual limpo e funcional para o sistema de matrícula */
 
-/* 1. RESET E FUNDAMENTOS (Box Model) */
-*, *::before, *::after {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box; /* Previne quebras de layout por padding/border */
-}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-.corpo-pagina {
-    font-family: 'Segoe UI', Arial, sans-serif;
-    line-height: 1.6;
-    background-color: #f4f9f9;
-    color: #333;
-    padding: 20px;
-}
-
-/* 2. NAVEGAÇÃO (Flexbox) */
-.menu-navegacao {
-    background: #005a8e;
-    padding: 10px;
-    border-radius: 8px;
-    margin-bottom: 20px;
-}
-
-.lista-navegacao {
-    list-style: none;
+body {
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    background: #0f172a;
+    color: #e2e8f0;
+    min-height: 100vh;
     display: flex;
+    align-items: center;
     justify-content: center;
-    gap: 20px;
+    padding: 2rem 1rem;
 }
 
-.item-menu {
-    color: #ffffff;
-    text-decoration: none;
-    font-weight: bold;
-    transition: color 0.3s;
-}
-
-.item-menu:hover {
-    color: #f4f9f9;
-    text-decoration: underline;
-}
-
-/* 3. ESTRUTURA E TÍTULOS */
-.cabecalho-principal, .cabecalho-sessao {
-    background-color: #0077be;
-    color: #ffffff;
-    padding: 1.5rem;
-    text-align: center;
-    border-radius: 8px;
-    margin-bottom: 20px;
-}
-
-h1, h2, .titulo-performance {
-    color: #005a8e;
-}
-
-.cabecalho-principal h1 {
-    color: #ffffff; /* Contraste garantido no cabeçalho azul */
-}
-
-/* 4. FORMULÁRIOS E INPUTS */
-.painel-agrupador {
-    border: 2px solid #0077be;
-    border-radius: 5px;
-    margin-bottom: 15px;
-    padding: 15px;
-    background-color: #ffffff;
-}
-
-.legenda-painel {
-    font-weight: bold;
-    padding: 0 10px;
-    color: #0077be;
-}
-
-.rotulo-campo {
-    display: block;
-    margin-top: 10px;
-    font-weight: bold;
-}
-
-.campo-texto, .campo-data, .area-texto, select {
+/* ── Card central ── */
+.card {
+    background: #1e293b;
+    border: 1px solid #334155;
+    border-radius: 1.25rem;
+    padding: 2.5rem 2rem;
     width: 100%;
-    padding: 8px;
-    margin-top: 5px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    font-family: inherit;
+    max-width: 480px;
+    box-shadow: 0 25px 60px rgba(0,0,0,.5);
 }
 
-/* Correção específica para o input de arquivo */
-.campo-arquivo {
+h1 { font-size: 1.5rem; font-weight: 700; margin-bottom: .4rem; }
+h2 { font-size: 1.3rem; font-weight: 700; margin-bottom: .8rem; }
+.subtitulo { font-size: .9rem; color: #94a3b8; margin-bottom: 1.8rem; }
+
+/* ── Campos ── */
+.campo { display: flex; flex-direction: column; gap: .4rem; margin-bottom: 1.2rem; }
+
+label { font-size: .82rem; font-weight: 600; color: #94a3b8; letter-spacing: .04em; text-transform: uppercase; }
+
+input, select {
+    background: #0f172a;
+    border: 1px solid #334155;
+    border-radius: .7rem;
+    padding: .75rem 1rem;
+    color: #e2e8f0;
+    font-size: .95rem;
+    outline: none;
+    transition: border-color .2s, box-shadow .2s;
+}
+input:focus, select:focus {
+    border-color: #38bdf8;
+    box-shadow: 0 0 0 3px rgba(56,189,248,.12);
+}
+select option { background: #1e293b; }
+
+/* ── Botão submit ── */
+.btn-submit {
     width: 100%;
-    padding: 10px;
-    background: #ffffff;
-    border: 1px dashed #0077be;
-    cursor: pointer;
-    min-height: 40px; /* Evita o corte da legenda nativa */
-    border-radius: 4px;
-    margin-top: 5px;
-}
-
-/* 5. BOTÕES */
-.botao-primario, .botao-sucesso, .botao-perigo {
-    color: #ffffff;
+    padding: .9rem;
     border: none;
-    padding: 12px 20px;
-    font-size: 16px;
-    border-radius: 5px;
+    border-radius: .8rem;
+    background: linear-gradient(135deg, #38bdf8, #818cf8);
+    color: #0f172a;
+    font-weight: 700;
+    font-size: 1rem;
     cursor: pointer;
-    width: 100%;
-    transition: filter 0.3s ease;
+    transition: opacity .2s, transform .2s;
+    margin-top: .5rem;
 }
+.btn-submit:hover { opacity: .88; transform: translateY(-2px); }
 
-.botao-primario, .botao-sucesso {
-    background-color: #28a745;
-    margin-top: 15px;
+/* ── Botão link ── */
+.btn {
+    display: inline-block;
+    margin-top: 1.2rem;
+    padding: .65rem 1.4rem;
+    border: 1px solid #334155;
+    border-radius: .7rem;
+    color: #94a3b8;
+    text-decoration: none;
+    font-size: .85rem;
+    transition: border-color .2s, color .2s;
 }
+.btn:hover { border-color: #38bdf8; color: #38bdf8; }
 
-.botao-perigo {
-    background-color: #dc3545;
-}
+/* ── Feedback cards ── */
+.card.sucesso { border-color: rgba(34,197,94,.35); }
+.card.sucesso h2 { color: #4ade80; }
 
-button:hover, .botao-primario:hover, .botao-sucesso:hover, .botao-perigo:hover {
-    filter: brightness(90%);
-}
+.card.erro { border-color: rgba(239,68,68,.35); }
+.card.erro h2 { color: #f87171; }
+.card.erro ul { margin: .8rem 0 0 1.2rem; font-size: .9rem; color: #fca5a5; line-height: 1.7; }
 
-/* 6. PAINEL DE MONITORAMENTO (Estética Neon) */
-.card-monitoramento {
-    background-color: #1a1a1a;
-    color: #00ff00; /* Verde neon GPS */
-    padding: 25px;
-    border-radius: 15px;
-    text-align: center;
-    border: 4px solid #0077be;
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-}
-
-.subtitulo-dados, .titulo-alerta {
-    color: #ffffff;
-    border-bottom: 1px solid #444;
-    padding-bottom: 10px;
-}
-
-.valor-destaque {
-    font-size: 2.2rem;
-    font-weight: bold;
-    display: block;
-    margin: 10px 0;
-    color: #00ff00;
-}
-
-/* 7. ALERTA DE HIDRATAÇÃO E ANIMAÇÃO */
-.alerta-hidratacao-card {
-    background-color: #004d7a;
-    padding: 15px;
-    border-radius: 10px;
-    animation: pulsar 2s infinite;
-}
-
-@keyframes pulsar {
-    0% { opacity: 1; box-shadow: 0 0 5px rgba(0, 77, 122, 0.5); }
-    50% { opacity: 0.7; box-shadow: 0 0 15px rgba(0, 119, 190, 0.8); }
-    100% { opacity: 1; box-shadow: 0 0 5px rgba(0, 77, 122, 0.5); }
-}
-
-/* 8. TABELAS (Relatórios e Histórico) */
-.tabela-responsiva {
-    width: 100%;
-    overflow-x: auto; /* Scroll horizontal em telas menores */
-    -webkit-overflow-scrolling: touch;
-    margin-top: 20px;
-    border-radius: 8px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-}
-
-.tabela-dados {
-    width: 100%;
-    min-width: 600px; /* Previne esmagamento de colunas no mobile */
-    border-collapse: collapse;
-    background: #ffffff;
-}
-
-.cabecalho-tabela th {
-    background-color: #0077be;
-    color: #ffffff;
-    padding: 12px;
-}
-
-.linha-dado td {
-    padding: 10px;
-    border-bottom: 1px solid #ddd;
-    text-align: center;
-}
-
-.badge-sucesso {
-    background: #28a745;
-    color: #ffffff;
-    padding: 4px 8px;
-    border-radius: 4px;
-    font-size: 0.8rem;
-}
-
-/* ============================================================
-   9. BREAKPOINTS E RESPONSIVIDADE
-   ============================================================ */
-
-/* MOBILE (Até 767px) */
-@media screen and (max-width: 767px) {
-    .corpo-pagina {
-        padding: 10px;
-    }
-    
-    .lista-navegacao {
-        flex-direction: column; /* Menu empilhado */
-        align-items: center;
-        gap: 10px;
-    }
-
-    .lista-navegacao li, .item-menu {
-        width: 100%;
-        text-align: center;
-        display: block;
-    }
-
-    .valor-destaque {
-        font-size: 1.8rem; /* Ajuste do neon para telas menores */
-    }
-}
-
-/* TABLET (768px a 1023px) */
-@media screen and (min-width: 768px) and (max-width: 1023px) {
-    .formulario-avancado {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 20px;
-        align-items: start;
-    }
-
-    .botao-sucesso {
-        grid-column: 1 / -1; /* Força o botão a ocupar todas as colunas disponíveis */
-    }
-}
-
-/* DESKTOP (1024px ou mais) */
-@media screen and (min-width: 1024px) {
-    .container-treino, .conteudo-restrito, .cabecalho-principal {
-        max-width: 1000px;
-        margin-left: auto;
-        margin-right: auto;
-    }
-
-    .card-monitoramento {
-        flex-direction: row; /* Coloca o GPS e o Alerta lado a lado */
-        justify-content: space-around;
-        align-items: center;
-    }
-
-    .alerta-hidratacao-card {
-        margin-top: 0;
-        width: 300px;
-    }
-    
-    /* Expansão do Grid do formulário para Desktop, se necessário */
-    .formulario-avancado {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 20px;
-    }
-    
-    .botao-sucesso {
-        grid-column: 1 / -1;
-    }
-}
-/* Esconde o botão no computador, ele só aparece no celular */
-#btn-menu {
-    display: none;
-    background: none;
-    border: 1px solid white;
-    color: white;
-    padding: 5px 10px;
-    cursor: pointer;
-    border-radius: 4px;
-}
-
-@media screen and (max-width: 767px) {
-    #btn-menu {
-        display: block; /* Mostra o botão no celular */
-        margin: 0 auto 10px;
-    }
-
-    .lista-navegacao {
-        display: none; /* Esconde a lista por padrão no celular */
-        flex-direction: column;
-        text-align: center;
-    }
-
-    /* Classe que o JavaScript vai "ligar" */
-    .lista-navegacao.menu-ativo {
-        display: flex; 
-    }
+/* ── Bolsa ── */
+.bolsa {
+    background: rgba(250,204,21,.1);
+    border: 1px solid rgba(250,204,21,.3);
+    border-radius: .7rem;
+    padding: .75rem 1rem;
+    font-size: .88rem;
+    color: #fde68a;
+    margin-top: 1rem;
 }
