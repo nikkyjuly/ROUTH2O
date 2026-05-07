@@ -1,0 +1,4 @@
+config.ini
+vendor/
+.env
+*.log
