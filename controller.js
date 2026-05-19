@@ -152,67 +152,19 @@ if (sessaoLogin && sessaoCadastro) {
         btnAbaCadastro.style.backgroundColor = '#28a745';
     });
 
-    // 2. CAOS: Nome com "mEmE CaSe" automático
-    const inputNomeCaos = document.getElementById('caos-nome');
-    inputNomeCaos.addEventListener('input', (e) => {
-        let texto = e.target.value.toLowerCase().split('');
-        for (let i = 0; i < texto.length; i += 2) {
-            texto[i] = texto[i].toUpperCase(); // Alterna as letras
-        }
-        e.target.value = texto.join('');
-    });
-
-    // 3. CAOS: Senha tremida visualmente
-    const inputSenhaCaos = document.getElementById('caos-senha');
-    inputSenhaCaos.addEventListener('input', (e) => {
-        const margens = ['2px', '-2px', '4px', '-4px', '0px'];
-        e.target.style.letterSpacing = margens[Math.floor(Math.random() * margens.length)];
-    });
-
-    // 4. CAOS: Botão Fujão (10 desvios)
     const btnSalvarContaCaos = document.getElementById('btn-salvar-caos');
-    let fugasConta = 0;
-    const provocacoes = ["Errou!", "Quase!", "Lento demais!", "Tenta aqui!", "Falta pouco!", "Ops!", "Zzz...", "Acorda!", "Mais uma!", "Parei!"];
-
-    btnSalvarContaCaos.addEventListener('mouseover', function() {
-        if (fugasConta < 10) {
-            // Pula de forma aleatória no eixo X e Y
-            const randomX = (Math.random() - 0.5) * 200; 
-            const randomY = (Math.random() - 0.5) * 150 - 50; 
-            
-            this.style.transform = `translate(${randomX}px, ${randomY}px)`;
-            this.textContent = provocacoes[fugasConta];
-            fugasConta++;
-        } else {
-            // Fica bonzinho depois de 10 vezes
-            this.style.transform = `translate(0px, 0px)`;
-            this.style.backgroundColor = "#28a745";
-            this.textContent = "Ufa! Pode clicar para salvar.";
-        }
-    });
 
     // 5. REGISTRAR CONTA (Salvar no DB)
     btnSalvarContaCaos.addEventListener('click', async () => {
-        if (fugasConta < 10) return; // Evita que o usuário clique com o teclado antes da hora
+        const nome = document.getElementById('caos-nome').value;
+        const emailCompleto = document.getElementById('caos-email').value;
+        const senha = document.getElementById('caos-senha').value;
 
-        const nome = inputNomeCaos.value;
-        const emailUser = document.getElementById('caos-email-user').value;
-        const emailDominio = document.getElementById('caos-email-dominio').value;
-        const senha = inputSenhaCaos.value;
-
-        if (!nome || !emailUser || !senha) {
-            alert("Preencha tudo se quiser sobreviver!");
+        if (!nome || !emailCompleto || !senha) {
+            alert("Por favor, preencha todos os campos.");
             return;
         }
 
-        if (!senha.toLowerCase().includes("agua")) {
-            alert('REGRA VIOLADA: A senha precisa conter a palavra "agua" (ex: 123agua456)!');
-            return;
-        }
-
-        const emailCompleto = `${emailUser}@${emailDominio}`;
-
-        // Objeto que vai para o IndexedDB
         const novaConta = {
             tipo: "Conta_Autenticacao",
             nome: nome,
@@ -223,15 +175,10 @@ if (sessaoLogin && sessaoCadastro) {
 
         try {
             await adicionarItem(novaConta);
-            alert(`Sobrevivente registrado com sucesso!\nConta criada para: ${emailCompleto}\n\nVocê será levado ao Login.`);
+            alert(`Conta criada com sucesso para: ${emailCompleto}`);
             
-            // Reseta a zoeira e o formulário
             document.getElementById('form-cadastro').reset();
-            fugasConta = 0;
-            btnSalvarContaCaos.style.backgroundColor = "#dc3545";
-            btnSalvarContaCaos.textContent = "Tentar Criar Conta";
             
-            // Volta para a aba de Login
             btnAbaLogin.click(); 
             listarDados(); // Mostra no console
         } catch (erro) {

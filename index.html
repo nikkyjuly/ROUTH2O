@@ -36,39 +36,27 @@
         </section>
 
         <section class="cartao-login" id="sessao-cadastro" style="display: none;">
-            <h2 style="text-align: center; color: #dc3545; margin-bottom: 20px;">Sobreviva para Registrar-se</h2>
+            <h2 style="text-align: center; color: #005a8e; margin-bottom: 20px;">Criar sua Conta</h2>
             <form id="form-cadastro" class="formulario-padrao">
                 
                 <div class="grupo-input">
-                    <label for="caos-nome">Nome (Teclado Descalibrado):</label>
-                    <input type="text" id="caos-nome" class="campo-texto" placeholder="dIgItE sEu nOmE..." required autocomplete="off">
+                    <label for="caos-nome">Nome Completo:</label>
+                    <input type="text" id="caos-nome" class="campo-texto" placeholder="Digite seu nome" required>
                 </div>
 
                 <div class="grupo-input">
-                    <label>E-mail Corporativo:</label>
-                    <div style="display: flex; gap: 10px; align-items: center;">
-                        <input type="text" id="caos-email-user" class="campo-texto" placeholder="usuario" required style="width: 50%;">
-                        <span>@</span>
-                        <select id="caos-email-dominio" class="campo-texto" style="width: 50%;">
-                            <option value="agua-de-salsicha.com">agua-de-salsicha.com</option>
-                            <option value="esqueci-meu-nome.net">esqueci-meu-nome.net</option>
-                            <option value="email-falso.org">email-falso.org</option>
-                            <option value="routh2o.com.br">routh2o.com.br</option>
-                            <option value="bol.com.br">bol.com.br</option>
-                        </select>
-                    </div>
+                    <label for="caos-email">E-mail:</label>
+                    <input type="email" id="caos-email" class="campo-texto" placeholder="seu@email.com" required>
                 </div>
 
                 <div class="grupo-input">
-                    <label for="caos-senha">Senha (Obrigatório conter a palavra "agua"):</label>
-                    <input type="text" id="caos-senha" class="campo-texto" placeholder="Todos estão vendo sua senha..." required autocomplete="off">
+                    <label for="caos-senha">Senha:</label>
+                    <input type="password" id="caos-senha" class="campo-texto" placeholder="Digite sua senha" required>
                 </div>
 
-                <div style="position: relative; height: 60px; margin-top: 30px;" id="area-botao-caos">
-                    <button type="button" id="btn-salvar-caos" class="botao-perigo" style="position: absolute; width: 100%; transition: transform 0.15s ease-out; z-index: 10;">
-                        Tentar Criar Conta
-                    </button>
-                </div>
+                <button type="button" id="btn-salvar-caos" class="botao-sucesso" style="width: 100%; margin-top: 20px;">
+                    Finalizar Cadastro
+                </button>
             </form>
         </section>
 
