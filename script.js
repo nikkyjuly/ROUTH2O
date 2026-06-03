@@ -11,26 +11,7 @@ botao.addEventListener('click', function() {
 // ============================================================
 // ATIVIDADE DOM - CÁLCULO E INTERATIVIDADE
 // ============================================================
-
-// 1. Cálculo de Hidratação
-const inputKm = document.querySelector('#km-input');
-const btnCalcular = document.querySelector('#btn-calcular-hidratacao');
-const outputResultado = document.querySelector('#resultado-hidratacao');
-
-if (btnCalcular) {
-    btnCalcular.addEventListener('click', function() {
-        const km = parseFloat(inputKm.value);
-        // Regra simples: 50ml por km (exemplo didático)
-        const mlNecessarios = km * 100; 
-        
-        const mensagem = `Para ${km} km, sugerimos ingerir ${mlNecessarios} ml de água.`;
-        
-        // Exibe no console
-        console.log(mensagem);
-        // Exibe na tela
-        outputResultado.textContent = mensagem;
-    });
-}
+// (A lógica de cálculo de hidratação foi movida para o controller.js via fetch)
 
 // 2. Dica Secreta
 const btnDica = document.querySelector('#btn-dica');

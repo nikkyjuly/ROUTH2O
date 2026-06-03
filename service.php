@@ -2,63 +2,49 @@
 
 /**
  * service.php
- * Responsabilidade: regras de negócio APENAS.
- * Não acessa banco, não lida com HTTP.
+ * Responsabilidade: Regras de negócio de performance e hidratação.
  */
 
-class MatriculaService
+class Routh2oService
 {
-    // ── Configuração das regras por curso ──────────────────────────────────
-    private array $idadeMinima = [
-        'Engenharia de Software' => 17,
-        'Medicina'               => 18,
-        'Design Gráfico'         => 16,
-        'Pedagogia'              => 17,
-        'Direito'                => 18,
-    ];
+    private IUsuarioRepository $repository;
 
-    // Alunos com 60+ anos ou renda declarada baixa recebem bolsa (simulação)
-    private int $idadeBolsa = 60;
-
-    // ── Método principal ───────────────────────────────────────────────────
-    /**
-     * Valida e enriquece os dados do aluno conforme regras de negócio.
-     *
-     * @param  array $dados  ['nome' => ..., 'idade' => ..., 'curso' => ...]
-     * @return array         Dados processados, incluindo chave 'bolsa' (bool)
-     * @throws Exception     Se alguma regra for violada
-     */
-    public function processar(array $dados): array
+    public function __construct(IUsuarioRepository $repository)
     {
-        $nome  = $dados['nome'];
-        $idade = (int) $dados['idade'];
-        $curso = $dados['curso'];
+        $this->repository = $repository;
+    }
 
-        // ── Regra 1: curso deve ser válido ────────────────────────────────
-        if (!array_key_exists($curso, $this->idadeMinima)) {
-            throw new Exception(
-                "Curso \"$curso\" não reconhecido. " .
-                "Opções: " . implode(', ', array_keys($this->idadeMinima)) . "."
-            );
+    public function validarNovoUsuario(array $dados): void
+    {
+        $usuarioExistente = $this->repository->findByEmail($dados['email']);
+
+        if ($usuarioExistente !== null) {
+            throw new BusinessRuleException("O e-mail '{$dados['email']}' já está cadastrado.");
         }
 
-        // ── Regra 2: idade mínima por curso ───────────────────────────────
-        $minima = $this->idadeMinima[$curso];
-        if ($idade < $minima) {
-            throw new Exception(
-                "Matrícula recusada: o curso \"$curso\" exige idade mínima de " .
-                "$minima anos. $nome tem $idade anos."
-            );
+        if (strlen($dados['senha']) < 8) {
+            throw new BusinessRuleException('A senha deve ter no mínimo 8 caracteres.');
         }
+    }
 
-        // ── Regra 3: bolsa de estudos (simulação) ─────────────────────────
-        $temBolsa = $idade >= $this->idadeBolsa;
+    public function podeExcluir(array $usuario): void
+    {
+        if ($usuario['perfil'] === 'admin') {
+            throw new BusinessRuleException('Não é permitido excluir um administrador.');
+        }
+    }
 
-        return [
-            'nome'   => $nome,
-            'idade'  => $idade,
-            'curso'  => $curso,
-            'bolsa'  => $temBolsa,
-        ];
+    // Baseado na aba Laboratório: Cálculo de meta hídrica por esforço
+    public function calcularMetaHidratacao(float $km): int 
+    {
+        // Regra fictícia: 35ml por kg base + 100ml por cada km percorrido
+        $base = 2000; // 2 litros base
+        $adicional = (int)($km * 100);
+        return $base + $adicional;
+    }
+
+    public function verificarSenha(string $senhaDigitada, string $senhaHash): bool 
+    {
+        return password_verify($senhaDigitada, $senhaHash);
     }
 }

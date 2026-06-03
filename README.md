@@ -1,106 +1,73 @@
-# 📋 Sistema de Matrícula — Arquitetura MVC em PHP
+# 💧 ROUTH2O — Bio-rastreamento e Performance Hídrica
 
-Projeto didático com arquitetura em camadas: **Migration → Model → Service → Controller → View**, protegido por **Middleware** e roteado por um **Router**, tudo acessado via um único **Front Controller**.
+O **ROUTH2O** é uma plataforma focada no monitoramento de performance física e gestão inteligente de hidratação. O projeto foi desenvolvido seguindo princípios de **Clean Architecture**, visando um código desacoplado, testável e de fácil manutenção.
 
----
+## 🏗️ Arquitetura e Padrões de Projeto
 
-## 📁 Estrutura de arquivos
+A aplicação utiliza PHP 8+ no backend e uma interface dinâmica baseada em componentes no frontend, comunicando-se via **Fetch API**.
 
+### Padrões Implementados:
+*   **Repository Pattern**: Abstração da camada de dados através da interface `IUsuarioRepository`, permitindo a troca de motores de banco de dados sem afetar a lógica de negócio.
+*   **Dependency Injection (DI)**: Utilizado no `index.php` para montar o grafo de objetos (`Repository -> Service -> Controller`).
+*   **Singleton Pattern**: Implementado na classe `Database` para garantir uma única conexão PDO ativa por ciclo de vida da requisição.
+*   **Service Layer**: Toda a regra de negócio (cálculos de hidratação e validações) está isolada em `Routh2oService`.
+*   **Front Controller**: Todas as requisições passam pelo `index.php`, centralizando o roteamento e a inicialização.
+
+## 📁 Organização do Projeto
+
+```text
+ROUTH2O/
+├── index.php             # Ponto de entrada e Container de Injeção de Dependência
+├── router.php            # Roteamento inteligente de endpoints e arquivos estáticos
+├── middleware.php        # Camada de segurança (Sanitização XSS e Controle de Sessão)
+├── controller.php        # Orquestrador de fluxo entre Service e View
+├── service.php           # Núcleo das regras de negócio e validações
+├── UsuarioRepository.php # Implementação concreta da persistência (SQLite)
+├── IUsuarioRepository.php # Contrato de abstração da camada de dados
+├── Database.php          # Conexão PDO centralizada (Singleton)
+├── model.php             # Entidade simples (Usuario)
+├── view.php              # Utilitário para respostas JSON consistentes
+├── migration.php         # Script de setup e estruturação do banco de dados
+├── config.ini            # Configurações de ambiente (Database path)
+├── controller.js         # Lógica de interação frontend e chamadas assíncronas
+└── style.css             # Identidade visual moderna e responsiva
 ```
-matricula-php/
-├── index.php        ← Front Controller (ponto de entrada único)
-├── router.php       ← Avalia método HTTP e direciona
-├── middleware.php   ← Validação e segurança da entrada
-├── controller.php   ← Orquestra Service + Model
-├── service.php      ← Regras de negócio (idade mínima, bolsa)
-├── model.php        ← Acesso ao banco (PDO + Prepared Statements)
-├── view.php         ← Formulário HTML
-├── migration.php    ← Cria o banco e a tabela (rodar 1× só)
-├── style.css        ← Estilo compartilhado
-└── database.sqlite  ← Gerado automaticamente pela migration
-```
 
----
+## 🚀 Como Executar
 
-## 🚀 Como rodar
+### 1. Requisitos
+*   PHP 8.0 ou superior instalado.
+*   Extensão `pdo_sqlite` habilitada.
 
-### 1. Rode a migration (apenas uma vez)
+### 2. Configuração do Banco de Dados
+Antes de rodar a aplicação, execute o script de migração no terminal para criar as tabelas necessárias:
 ```bash
 php migration.php
 ```
-Isso cria o arquivo `database.sqlite` com a tabela `alunos`.
+Isso criará o arquivo `database.sqlite` com as tabelas `Usuario` (incluindo campos de bio e objetivos) e `Treino`.
 
-### 2. Suba o servidor built-in
+### 3. Iniciando o Servidor
+Para que o roteamento funcione corretamente, utilize o servidor embutido do PHP apontando para o arquivo principal:
 ```bash
-php -S localhost:8000
+php -S localhost:8000 index.php
 ```
 
-### 3. Acesse no navegador
-```
-http://localhost:8000
-```
+### 4. Acesso
+Abra o navegador e acesse: `http://localhost:8000`
+
+## 🛡️ Segurança e Validação
+
+*   **Proteção XSS**: Todas as entradas de texto são sanitizadas via `FILTER_SANITIZE_FULL_SPECIAL_CHARS` na camada de Middleware.
+*   **Persistência de Senhas**: Utiliza o algoritmo BCRYPT através de `password_hash` e `password_verify`.
+*   **Controle de Sessão**: Rotas críticas (Perfil, Treino, Relatórios) são protegidas por verificação de sessão ativa no servidor.
+*   **SQL Injection**: Proteção nativa através do uso exclusivo de *Prepared Statements* na camada de Repositório.
+
+## 🧪 Fluxo de Trabalho
+
+1.  **Registro/Login**: O usuário cria uma conta; os dados são sanitizados pelo Middleware e validados pelo Service antes de serem salvos no Repository.
+2.  **Laboratório**: Permite calcular a meta de ingestão de água baseada na distância percorrida, utilizando lógica processada no backend.
+3.  **Treino**: Interface para monitoramento em tempo real (simulação de GPS).
+4.  **Perfil**: Atualização de dados biométricos e objetivos, persistidos diretamente no SQLite via Fetch assíncrono.
 
 ---
-
-## 🧪 Roteiro de testes
-
-| Teste | O que observar |
-|---|---|
-| Enviar formulário **vazio** | `middleware.php` bloqueia com mensagem de aviso |
-| Idade **não numérica** (ex.: `abc`) | `middleware.php` recusa |
-| Aluno com **idade menor** que o mínimo do curso | `service.php` lança exceção com mensagem clara |
-| Aluno com **60+ anos** | `service.php` retorna flag de bolsa; Controller exibe aviso amarelo |
-| Dados **válidos e completos** | Sucesso — linha salva no SQLite |
-| Abrir `database.sqlite` no SQLite Viewer (VSCode) | Confirmar registro na tabela `alunos` |
-
----
-
-## 🏗 Fluxo de uma requisição POST
-
-```
-Navegador (POST /)
-    └─→ index.php          (Front Controller)
-         └─→ router.php    (identifica POST /)
-              └─→ middleware.php  (valida campos)
-                   └─→ controller.php  (orquestra)
-                        ├─→ service.php   (regras de negócio)
-                        └─→ model.php     (salva no SQLite)
-                             └─→ database.sqlite
-```
-
----
-
-## 📌 Cursos disponíveis e idades mínimas
-
-| Curso | Idade mínima |
-|---|---|
-| Design Gráfico | 16 anos |
-| Engenharia de Software | 17 anos |
-| Pedagogia | 17 anos |
-| Medicina | 18 anos |
-| Direito | 18 anos |
-
-> Alunos com **60 anos ou mais** são pré-selecionados para bolsa de estudos.
-
----
-
-## 💡 Conceitos praticados
-
-- **PDO** com SQLite e Prepared Statements (proteção contra SQL Injection)
-- **Encapsulamento** — propriedades `private` com getters/setters públicos
-- **Separation of Concerns** — cada arquivo tem uma única responsabilidade
-- **Exception handling** — `try/catch` no Controller, `throw` no Service
-- **Front Controller Pattern** — toda requisição passa pelo `index.php`
-- **Middleware** — camada de segurança antes do processamento
-
----
-
-## 🔼 Commit sugerido
-
-```bash
-git init
-git add .
-git commit -m "feat: sistema de matrícula MVC com PDO, middleware e SQLite"
-git remote add origin <url-do-seu-repo>
-git push -u origin main
-```
+**Desenvolvido com foco em excelência arquitetural e bio-performance.**

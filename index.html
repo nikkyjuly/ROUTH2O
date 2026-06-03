@@ -20,15 +20,15 @@
 
         <section class="cartao-login" id="sessao-login">
             <h2 style="text-align: center; color: #005a8e; margin-bottom: 20px;">Bem-vindo de volta!</h2>
-            <form id="form-login" class="formulario-padrao">
+            <form id="form-login" action="/login" method="POST" class="formulario-padrao">
                 <div class="grupo-input">
                     <label for="login-email">E-mail:</label>
-                    <input type="email" id="login-email" class="campo-texto" required>
+                    <input type="email" id="login-email" name="email" class="campo-texto" required>
                 </div>
 
                 <div class="grupo-input">
                     <label for="login-senha">Senha:</label>
-                    <input type="password" id="login-senha" class="campo-texto" required>
+                    <input type="password" id="login-senha" name="senha" class="campo-texto" required>
                 </div>
 
                 <button type="submit" class="botao-primario">Entrar no Sistema</button>
@@ -37,24 +37,24 @@
 
         <section class="cartao-login" id="sessao-cadastro" style="display: none;">
             <h2 style="text-align: center; color: #005a8e; margin-bottom: 20px;">Criar sua Conta</h2>
-            <form id="form-cadastro" class="formulario-padrao">
+            <form id="form-cadastro" action="/registrar" method="POST" class="formulario-padrao">
                 
                 <div class="grupo-input">
                     <label for="caos-nome">Nome Completo:</label>
-                    <input type="text" id="caos-nome" class="campo-texto" placeholder="Digite seu nome" required>
+                    <input type="text" id="caos-nome" name="nome" class="campo-texto" placeholder="Digite seu nome" required>
                 </div>
 
                 <div class="grupo-input">
                     <label for="caos-email">E-mail:</label>
-                    <input type="email" id="caos-email" class="campo-texto" placeholder="seu@email.com" required>
+                    <input type="email" id="caos-email" name="email" class="campo-texto" placeholder="seu@email.com" required>
                 </div>
 
                 <div class="grupo-input">
                     <label for="caos-senha">Senha:</label>
-                    <input type="password" id="caos-senha" class="campo-texto" placeholder="Digite sua senha" required>
+                    <input type="password" id="caos-senha" name="senha" class="campo-texto" placeholder="Digite sua senha" required>
                 </div>
 
-                <button type="button" id="btn-salvar-caos" class="botao-sucesso" style="width: 100%; margin-top: 20px;">
+                <button type="submit" id="btn-salvar-caos" class="botao-sucesso" style="width: 100%; margin-top: 20px;">
                     Finalizar Cadastro
                 </button>
             </form>
@@ -63,7 +63,6 @@
     </main>
 
     <script src="script.js"></script>
-    <script src="db.js"></script>
     <script src="controller.js"></script>
 </body>
 </html>

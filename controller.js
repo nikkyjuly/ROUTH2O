@@ -7,44 +7,40 @@ if (formPerfil) {
     formPerfil.addEventListener('submit', async (event) => {
         event.preventDefault(); // Impede a página de recarregar
 
-        const nascimento = document.getElementById('nascimento').value;
-        const objetivoRadio = document.querySelector('input[name="obj"]:checked');
-        
-        // Pega o texto do objetivo com base no value do radio
-        let objetivoTexto = 'Não informado';
-        if (objetivoRadio) {
-            objetivoTexto = objetivoRadio.value === '1' ? 'Emagrecer' : 'Ganho Muscular';
-        }
-        
-        const bio = document.getElementById('bio').value;
-
-        const registroPerfil = {
-            tipo: "Perfil",
-            dataNascimento: nascimento,
-            objetivo: objetivoTexto,
-            biografia: bio,
-            dataRegistro: new Date().toLocaleDateString()
-        };
+        const formData = new FormData(formPerfil);
 
         try {
-            await adicionarItem(registroPerfil);
-            alert("Alterações salvas com sucesso no banco de dados!");
-            listarDados(); // Mostra no console
+            // O campo 'bio' agora é enviado separadamente e tratado no backend
+            const response = await fetch('/perfil', {
+                method: 'POST',
+                body: formData
+            });
+            const resultado = await response.json();
+            if (resultado.sucesso) {
+                alert(resultado.mensagem);
+            } else {
+                alert("Erro: " + resultado.erro);
+            }
         } catch (erro) {
             console.error("Erro ao salvar perfil:", erro);
         }
     });
 }
 
-// Função utilitária para ver no console (Inspecionar Elemento)
-async function listarDados() {
-    try {
-        const dados = await buscarItens();
-        console.log("Dados atuais no IndexedDB:");
-        console.table(dados);
-    } catch (erro) {
-        console.error("Erro ao listar dados:", erro);
-    }
+// ============================================================
+// CÁLCULO DE HIDRATAÇÃO (atividade_dom.html)
+// ============================================================
+const btnCalcular = document.getElementById('btn-calcular-hidratacao');
+const inputKm = document.getElementById('km-input');
+const displayResultado = document.getElementById('resultado-hidratacao');
+
+if (btnCalcular) {
+    btnCalcular.addEventListener('click', async () => {
+        const km = inputKm.value;
+        const response = await fetch(`/calcular?km=${km}`);
+        const dados = await response.json();
+        displayResultado.textContent = `Meta Sugerida: ${dados.meta}ml`;
+    });
 }
 
 // ============================================================
@@ -116,10 +112,17 @@ if (btnSalvarDataCaos) {
             };
 
             try {
-                const mensagem = await adicionarItem(registroCaos);
-                console.log(mensagem);
-                alert(`Sucesso! A data [ ${dataCaotica} ] foi salva no IndexedDB!`);
-                listarDados(); 
+                // Sincronizando com o endpoint de perfil do PHP
+                const formData = new FormData();
+                formData.append('nascimento', `${ano}-${mes.padStart(2, '0')}-${dia.padStart(2, '0')}`);
+                // Se houver outros campos de perfil que possam ser afetados, adicione-os aqui
+
+                const response = await fetch('/perfil', {
+                    method: 'POST',
+                    body: formData
+                });
+                const res = await response.json();
+                alert(`Sucesso! A data [ ${dataCaotica} ] foi sincronizada com seu perfil.`);
             } catch (erro) {
                 console.error("Erro ao salvar data caótica:", erro);
             }
@@ -152,67 +155,46 @@ if (sessaoLogin && sessaoCadastro) {
         btnAbaCadastro.style.backgroundColor = '#28a745';
     });
 
-    const btnSalvarContaCaos = document.getElementById('btn-salvar-caos');
-
-    // 5. REGISTRAR CONTA (Salvar no DB)
-    btnSalvarContaCaos.addEventListener('click', async () => {
-        const nome = document.getElementById('caos-nome').value;
-        const emailCompleto = document.getElementById('caos-email').value;
-        const senha = document.getElementById('caos-senha').value;
-
-        if (!nome || !emailCompleto || !senha) {
-            alert("Por favor, preencha todos os campos.");
-            return;
-        }
-
-        const novaConta = {
-            tipo: "Conta_Autenticacao",
-            nome: nome,
-            email: emailCompleto,
-            senha: senha,
-            dataCriacao: new Date().toLocaleDateString()
-        };
+    const formCadastro = document.getElementById('form-cadastro');
+    
+    formCadastro.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const formData = new FormData(formCadastro);
 
         try {
-            await adicionarItem(novaConta);
-            alert(`Conta criada com sucesso para: ${emailCompleto}`);
-            
-            document.getElementById('form-cadastro').reset();
-            
-            btnAbaLogin.click(); 
-            listarDados(); // Mostra no console
+            const response = await fetch('/registrar', {
+                method: 'POST',
+                body: formData
+            });
+
+            const res = await response.json();
+            if (res.sucesso) {
+                alert(res.mensagem);
+                btnAbaLogin.click(); // Volta para a aba de login
+            } else {
+                alert("Erro: " + res.erro);
+            }
         } catch (erro) {
             console.error("Erro ao criar conta:", erro);
         }
     });
 
-    // 6. LOGIN REAL (Verificar no DB)
     const formLogin = document.getElementById('form-login');
-    formLogin.addEventListener('submit', async (event) => {
-        event.preventDefault(); // Impede a página de recarregar
-        
-        const emailDigitado = document.getElementById('login-email').value;
-        const senhaDigitada = document.getElementById('login-senha').value;
-
-        try {
-            // Puxa TODOS os dados do banco
-            const dadosBanco = await buscarItens();
-            
-            // Filtra apenas os registros que são Contas de Usuário
-            const contas = dadosBanco.filter(item => item.tipo === "Conta_Autenticacao");
-            
-            // Procura se existe algum usuário com o e-mail E senha idênticos
-            const usuarioValido = contas.find(conta => conta.email === emailDigitado && conta.senha === senhaDigitada);
-
-            if (usuarioValido) {
-                alert(`Acesso Liberado! Bem-vindo(a), ${usuarioValido.nome}!`);
-                window.location.href = "treino.html"; // Redireciona para o painel principal
-            } else {
-                alert("Acesso Negado! E-mail ou senha incorretos.\nSerá que você não precisa criar uma conta primeiro?");
+    if (formLogin) {
+        formLogin.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const formData = new FormData(formLogin);
+            try {
+                const response = await fetch('/login', {
+                    method: 'POST',
+                    body: formData
+                });
+                const res = await response.json();
+                if (res.sucesso) window.location.href = res.redirecionar;
+                else alert(res.erro);
+            } catch (erro) {
+                console.error("Erro no login:", erro);
             }
-
-        } catch (erro) {
-            console.error("Erro ao verificar credenciais:", erro);
-        }
-    });
+        });
+    }
 }

@@ -1,91 +1,85 @@
 <?php
 
-require_once __DIR__ . '/model.php';
-require_once __DIR__ . '/service.php';
+require_once __DIR__ . '/view.php';
 
 /**
  * controller.php
- * Responsabilidade: orquestrar o fluxo POST.
- * Recebe dados → chama Service → chama Model → decide resposta.
+ * Responsabilidade: Orquestrar ações de Usuário e Treino.
  */
-
-class MatriculaController
+class Routh2oController
 {
-    public function processarMatricula(array $dadosBrutos): void
+    private $repository;
+    private $service;
+    private $view;
+
+    public function __construct(IUsuarioRepository $repository, Routh2oService $service) 
     {
-        $service = new MatriculaService();
+        $this->repository = $repository;
+        $this->service = $service;
+        $this->view = new View();
+    }
 
-        try {
-            // ── 1. Aplica regras de negócio ───────────────────────────────
-            $dadosProcessados = $service->processar($dadosBrutos);
-
-            // ── 2. Persiste via Model ─────────────────────────────────────
-            $aluno = new AlunoModel();
-            $aluno->setNome($dadosProcessados['nome']);
-            $aluno->setIdade($dadosProcessados['idade']);
-            $aluno->setCurso($dadosProcessados['curso']);
-            $aluno->save();
-
-            // ── 3. Resposta de sucesso ────────────────────────────────────
-            $bolsaMsg = $dadosProcessados['bolsa']
-                ? '<p class="bolsa">🎓 Parabéns! Você foi pré-selecionado para <strong>bolsa de estudos</strong>.</p>'
-                : '';
-
-            $this->renderFeedback('sucesso', $dadosProcessados['nome'], $dadosProcessados['curso'], $bolsaMsg);
-
-        } catch (Exception $e) {
-            // ── 4. Resposta de erro (regra de negócio) ────────────────────
-            $this->renderFeedback('erro', mensagem: $e->getMessage());
+    public function login(array $dados): void 
+    {
+        $usuario = $this->repository->findByEmail($dados['email']);
+        if ($usuario && $this->service->verificarSenha($dados['senha'], $usuario['senha'])) {
+            session_start();
+            $_SESSION['usuario_id'] = $usuario['id'];
+            $_SESSION['nome'] = $usuario['nome'];
+            $this->view->renderJson(['sucesso' => true, 'redirecionar' => 'treino.html']);
+        } else {
+            http_response_code(401);
+            $this->view->renderJson(['erro' => 'E-mail ou senha incorretos.']);
         }
     }
 
-    // ── Helper de resposta ────────────────────────────────────────────────
-    private function renderFeedback(
-        string  $tipo,
-        string  $nome     = '',
-        string  $curso    = '',
-        string  $extra    = '',
-        string  $mensagem = ''
-    ): void {
-        if ($tipo === 'sucesso') {
-            echo <<<HTML
-            <!DOCTYPE html>
-            <html lang="pt-BR">
-            <head>
-                <meta charset="UTF-8">
-                <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                <title>Matrícula Confirmada</title>
-                <link rel="stylesheet" href="style.css">
-            </head>
-            <body>
-                <div class="card sucesso">
-                    <h2>✅ Matrícula realizada!</h2>
-                    <p><strong>$nome</strong> foi matriculado(a) em <strong>$curso</strong> com sucesso.</p>
-                    $extra
-                    <a href="/" class="btn">← Voltar ao formulário</a>
-                </div>
-            </body>
-            </html>
-            HTML;
-        } else {
-            echo <<<HTML
-            <!DOCTYPE html>
-            <html lang="pt-BR">
-            <head>
-                <meta charset="UTF-8">
-                <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                <title>Matrícula Recusada</title>
-                <link rel="stylesheet" href="style.css">
-            </head>
-            <body>
-                <div class="card erro">
-                    <h2>❌ Matrícula recusada</h2>
-                    <p>$mensagem</p>
-                    <a href="/" class="btn">← Tentar novamente</a>
-                </div>
-            </body>
-            </html>
-            HTML;
+    public function registrar(array $dados): void 
+    {
+        try {
+            $this->service->validarNovoUsuario($dados);
+            
+            if ($this->repository->save($dados)) {
+                $this->view->renderJson(['sucesso' => true, 'mensagem' => 'Conta criada com sucesso!']);
+            }
+        } catch (BusinessRuleException $e) {
+            http_response_code(400);
+            $this->view->renderJson(['erro' => $e->getMessage()]);
         }
+    }
+
+    public function salvarPerfil(int $id, array $dados): void 
+    {
+        $usuarioAtual = $this->repository->find($id);
+        $perfilParaSalvar = [
+            'id'              => $id,
+            'nome'            => $usuarioAtual['nome'],
+            'email'           => $usuarioAtual['email'],
+            'data_nascimento' => $dados['nascimento'] ?? null,
+            'objetivos'       => $dados['objetivo'] ?? $dados['obj'] ?? null,
+            'bio'             => $dados['bio'] ?? null // Mapeando o campo bio
+        ];
+        $this->repository->save($perfilParaSalvar);
+        $this->view->renderJson(['sucesso' => true, 'mensagem' => 'Perfil atualizado!']);
+    }
+
+    public function excluir(int $id): void
+    {
+        $usuario = $this->repository->find($id);
+        if ($usuario) {
+            try {
+                $this->service->podeExcluir($usuario);
+                $this->repository->delete($id);
+                $this->view->renderJson(['sucesso' => true, 'mensagem' => 'Usuário excluído com sucesso!']);
+            } catch (BusinessRuleException $e) {
+                $this->view->renderJson(['erro' => $e->getMessage()]);
+            }
+        }
+    }
+
+    public function calcularHidratacao(float $km): void 
+    {
+        $meta = $this->service->calcularMetaHidratacao($km);
+        // Retorna via View para exibição
+        (new View())->renderJson(['meta' => $meta]);
     }
 }

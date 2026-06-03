@@ -4,28 +4,23 @@ class Database
 {
     private static ?PDO $instance = null;
 
-    // Construtor privado: ninguém instancia esta classe diretamente
-    private function __construct() {}
-
     public static function getConnection(): PDO
     {
         if (self::$instance === null) {
-            $config = parse_ini_file(__DIR__ . '/../config.ini', true);
+            $config = parse_ini_file(__DIR__ . '/config.ini', true);
+            $dbPath = __DIR__ . DIRECTORY_SEPARATOR . ($config['database']['path'] ?? 'database.sqlite');
 
-            if (!$config || !isset($config['database'])) {
-                throw new RuntimeException('Arquivo config.ini não encontrado ou inválido.');
+            try {
+                self::$instance = new PDO("sqlite:$dbPath");
+                self::$instance->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+                self::$instance->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
+            } catch (PDOException $e) {
+                die(json_encode(['erro' => 'Falha na conexão com o banco de dados.']));
             }
-
-            $db   = $config['database'];
-            $dsn  = "mysql:host={$db['host']};port={$db['port']};dbname={$db['dbname']};charset={$db['charset']}";
-
-            self::$instance = new PDO($dsn, $db['username'], $db['password'], [
-                PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
-                PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-                PDO::ATTR_EMULATE_PREPARES   => false,
-            ]);
         }
-
         return self::$instance;
     }
+
+    private function __construct() {}
+    private function __clone() {}
 }

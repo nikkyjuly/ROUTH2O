@@ -2,8 +2,8 @@
 
 interface IUsuarioRepository
 {
-    public function save(Usuario $usuario): bool;
-    public function find(int $id): ?Usuario;
-    public function findByEmail(string $email): ?Usuario;
+    public function save(array $dados): bool;
+    public function find(int $id): ?array;
+    public function findByEmail(string $email): ?array;
     public function delete(int $id): bool;
 }

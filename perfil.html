@@ -15,33 +15,33 @@
         <li><a href="atividade_dom.html" class="item-menu">Laboratório</a></li>
         <li><a href="treino.html" class="item-menu">Treino</a></li>
         <li><a href="relatorios.html" class="item-menu">Relatórios</a></li>
-        <li><a href="login.html" class="item-menu">Sair</a></li>
+        <li><a href="index.html" class="item-menu">Sair</a></li>
     </ul>
     </nav>
 
     <main class="conteudo-restrito">
         <h2 class="titulo-secao">Configurações de Bio-rastreamento</h2>
         
-        <form action="#" class="formulario-avancado">
+        <form action="/perfil" method="POST" class="formulario-avancado">
             <fieldset class="painel-agrupador">
                 <legend class="legenda-painel">Dados Biométricos</legend>
                 
                 <label for="foto" class="rotulo-campo">Foto:</label>
-                <input type="file" id="foto" class="campo-arquivo">
+                <input type="file" id="foto" name="foto" class="campo-arquivo">
 
                 <label for="nascimento" class="rotulo-campo">Nascimento:</label>
-                <input type="date" id="nascimento" class="campo-data">
+                <input type="date" id="nascimento" name="nascimento" class="campo-data">
             </fieldset>
 
             <fieldset class="painel-agrupador">
                 <legend class="legenda-painel">Objetivos</legend>
                 <div class="opcoes-selecao">
-                    <label class="rotulo-radio"><input type="radio" name="obj" value="1"> Emagrecer</label>
-                    <label class="rotulo-radio"><input type="radio" name="obj" value="2"> Ganho Muscular</label>
+                    <label class="rotulo-radio"><input type="radio" name="obj" value="Emagrecer"> Emagrecer</label>
+                    <label class="rotulo-radio"><input type="radio" name="obj" value="Ganho Muscular"> Ganho Muscular</label>
                 </div>
 
                 <label for="bio" class="rotulo-campo">Bio/Observações:</label>
-                <textarea id="bio" class="area-texto" rows="3"></textarea>
+                <textarea id="bio" name="bio" class="area-texto" rows="3"></textarea>
             </fieldset>
 
             <button type="submit" class="botao-sucesso">Salvar Alterações</button>
@@ -49,7 +49,6 @@
     </main>
 
     <script src="script.js"></script>
-    <script src="db.js"></script>
     <script src="controller.js"></script>
 </body>
 </html>

@@ -1,0 +1,56 @@
+// ==========================================
+// ENTIDADES (TABELAS)
+// ==========================================
+
+Table Usuario {
+  id integer [primary key, increment]
+  nome varchar [not null]
+  email varchar [unique, not null]
+  senha varchar [not null, note: 'Armazenar sempre em hash']
+  data_nascimento date
+  objetivos text
+}
+
+Table Foto_Usuario {
+  id integer [primary key, increment]
+  usuario_id integer [not null]
+  url_foto varchar [not null, note: 'Link da imagem salva no servidor/nuvem']
+  data_upload timestamp [default: `now()`]
+}
+
+Table Treino {
+  id integer [primary key, increment]
+  usuario_id integer [not null]
+  data_inicio timestamp [default: `now()`]
+  distancia_km decimal [default: 0.00]
+  inclinacao_pct decimal [default: 0.00]
+  alerta_hidratacao_disparado boolean [default: false]
+  status varchar [note: 'Ex: em_andamento, concluido, cancelado']
+}
+
+Table Dados_GPS {
+  id integer [primary key, increment]
+  treino_id integer [not null]
+  latitude decimal [not null]
+  longitude decimal [not null]
+  momento timestamp [default: `now()`]
+}
+
+Table Curiosidade_Diaria {
+  id integer [primary key, increment]
+  data_exibicao date [unique, not null]
+  conteudo text [not null]
+}
+
+// ==========================================
+// RELACIONAMENTOS (FOREIGN KEYS)
+// ==========================================
+
+// Um usuário pode ter várias fotos (1:N)
+Ref: Foto_Usuario.usuario_id > Usuario.id
+
+// Um usuário pode ter vários treinos/histórico (1:N)
+Ref: Treino.usuario_id > Usuario.id
+
+// Um treino possui várias coordenadas de GPS (1:N)
+Ref: Dados_GPS.treino_id > Treino.id

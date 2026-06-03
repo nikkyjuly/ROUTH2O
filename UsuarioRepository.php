@@ -1,72 +1,64 @@
 <?php
 
+require_once __DIR__ . '/Database.php';
+require_once __DIR__ . '/IUsuarioRepository.php';
+
 class UsuarioRepository implements IUsuarioRepository
 {
-    public function __construct(private PDO $pdo) {}
+    private PDO $db;
 
-    // ── Salva (INSERT ou UPDATE) ──
-    public function save(Usuario $usuario): bool
+    public function __construct()
     {
-        if ($usuario->getId() === null) {
-            // INSERT
-            $stmt = $this->pdo->prepare(
-                'INSERT INTO usuarios (nome, email, senha, perfil) VALUES (:nome, :email, :senha, :perfil)'
-            );
+        $this->db = Database::getConnection();
+    }
+
+    public function save(array $dados): bool
+    {
+        if (isset($dados['id'])) {
+            $stmt = $this->db->prepare("UPDATE Usuario SET nome = :nome, email = :email, objetivos = :obj, data_nascimento = :nasc, perfil = :perfil WHERE id = :id");
+            $params = [
+                ':id'     => $dados['id'],
+                ':nome'   => $dados['nome'],
+                ':email'  => $dados['email'],
+                ':obj'    => $dados['objetivos'] ?? null,
+                ':nasc'   => $dados['data_nascimento'] ?? null,
+                ':perfil' => $dados['perfil'] ?? 'usuario',
+                ':bio'    => $dados['bio'] ?? null
+            ];
         } else {
-            // UPDATE
-            $stmt = $this->pdo->prepare(
-                'UPDATE usuarios SET nome = :nome, email = :email, senha = :senha, perfil = :perfil WHERE id = :id'
-            );
-            $stmt->bindValue(':id', $usuario->getId(), PDO::PARAM_INT);
+            $stmt = $this->db->prepare("INSERT INTO Usuario (nome, email, senha, perfil, objetivos, data_nascimento) VALUES (:nome, :email, :senha, :perfil, :obj, :nasc)");
+            $params = [
+                ':nome'   => $dados['nome'],
+                ':email'  => $dados['email'],
+                ':senha'  => password_hash($dados['senha'], PASSWORD_BCRYPT),
+                ':perfil' => $dados['perfil'] ?? 'usuario',
+                ':obj'    => $dados['objetivos'] ?? null,
+                ':nasc'   => $dados['data_nascimento'] ?? null,
+                ':bio'    => $dados['bio'] ?? null
+            ];
         }
-
-        $stmt->bindValue(':nome',   $usuario->getNome());
-        $stmt->bindValue(':email',  $usuario->getEmail());
-        $stmt->bindValue(':senha',  $usuario->getSenha());
-        $stmt->bindValue(':perfil', $usuario->getPerfil());
-
-        return $stmt->execute();
+        return $stmt->execute($params);
     }
 
-    // ── Busca por ID ──
-    public function find(int $id): ?Usuario
+    public function find(int $id): ?array
     {
-        $stmt = $this->pdo->prepare('SELECT * FROM usuarios WHERE id = :id LIMIT 1');
-        $stmt->bindValue(':id', $id, PDO::PARAM_INT);
-        $stmt->execute();
-
-        $row = $stmt->fetch();
-        return $row ? $this->hydrate($row) : null;
+        $stmt = $this->db->prepare("SELECT * FROM Usuario WHERE id = ?");
+        $stmt->execute([$id]);
+        $res = $stmt->fetch();
+        return $res ?: null;
     }
 
-    // ── Busca por e-mail ──
-    public function findByEmail(string $email): ?Usuario
+    public function findByEmail(string $email): ?array
     {
-        $stmt = $this->pdo->prepare('SELECT * FROM usuarios WHERE email = :email LIMIT 1');
-        $stmt->bindValue(':email', $email);
-        $stmt->execute();
-
-        $row = $stmt->fetch();
-        return $row ? $this->hydrate($row) : null;
+        $stmt = $this->db->prepare("SELECT * FROM Usuario WHERE email = ?");
+        $stmt->execute([$email]);
+        $res = $stmt->fetch();
+        return $res ?: null;
     }
 
-    // ── Delete ──
     public function delete(int $id): bool
     {
-        $stmt = $this->pdo->prepare('DELETE FROM usuarios WHERE id = :id');
-        $stmt->bindValue(':id', $id, PDO::PARAM_INT);
-        return $stmt->execute();
-    }
-
-    // ── Converte array do banco → objeto Usuario ──
-    private function hydrate(array $row): Usuario
-    {
-        $usuario = new Usuario();
-        $usuario->setId((int) $row['id']);
-        $usuario->setNome($row['nome']);
-        $usuario->setEmail($row['email']);
-        $usuario->setSenha($row['senha']);
-        $usuario->setPerfil($row['perfil']);
-        return $usuario;
+        $stmt = $this->db->prepare("DELETE FROM Usuario WHERE id = ?");
+        return $stmt->execute([$id]);
     }
 }

@@ -1,37 +1,57 @@
 <?php
 
-/**
- * migration.php
- * Execute uma única vez: php migration.php
- * Cria o arquivo database.sqlite e a tabela alunos.
- */
+require_once __DIR__ . '/Database.php';
 
-class Migration
-{
-    private PDO $pdo;
+echo "Iniciando migração do banco de dados...\n";
 
-    public function __construct()
-    {
-        // Cria (ou abre) o arquivo SQLite na mesma pasta
-        $this->pdo = new PDO('sqlite:' . __DIR__ . '/database.sqlite');
-        $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-    }
+$db = Database::getConnection();
 
-    public function run(): void
-    {
-        $sql = "CREATE TABLE IF NOT EXISTS alunos (
-                    id     INTEGER PRIMARY KEY AUTOINCREMENT,
-                    nome   TEXT,
-                    idade  INTEGER,
-                    curso  TEXT
-                )";
+$sql = "
+    CREATE TABLE IF NOT EXISTS Usuario (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        nome TEXT NOT NULL,
+        email TEXT UNIQUE NOT NULL,
+        senha TEXT NOT NULL,
+        data_nascimento TEXT,
+        objetivos TEXT,
+        bio TEXT, -- Adicionado campo bio
+        perfil TEXT DEFAULT 'usuario'
+    );
 
-        $this->pdo->exec($sql);
+    CREATE TABLE IF NOT EXISTS Foto_Usuario (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        usuario_id INTEGER NOT NULL,
+        url_foto TEXT NOT NULL,
+        data_upload DATETIME DEFAULT CURRENT_TIMESTAMP,
+        FOREIGN KEY (usuario_id) REFERENCES Usuario(id) ON DELETE CASCADE
+    );
 
-        echo "✅ Migração concluída! Arquivo database.sqlite criado e tabela 'alunos' pronta." . PHP_EOL;
-    }
-}
+    CREATE TABLE IF NOT EXISTS Treino (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        usuario_id INTEGER NOT NULL,
+        data_inicio DATETIME DEFAULT CURRENT_TIMESTAMP,
+        distancia_km REAL DEFAULT 0.00,
+        inclinacao_pct REAL DEFAULT 0.00,
+        alerta_hidratacao_disparado BOOLEAN DEFAULT 0,
+        status TEXT,
+        FOREIGN KEY (usuario_id) REFERENCES Usuario(id) ON DELETE CASCADE
+    );
 
-// ── Ponto de execução ──
-$migration = new Migration();
-$migration->run();
+    CREATE TABLE IF NOT EXISTS Dados_GPS (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        treino_id INTEGER NOT NULL,
+        latitude REAL NOT NULL,
+        longitude REAL NOT NULL,
+        momento DATETIME DEFAULT CURRENT_TIMESTAMP,
+        FOREIGN KEY (treino_id) REFERENCES Treino(id) ON DELETE CASCADE
+    );
+
+    CREATE TABLE IF NOT EXISTS Curiosidade_Diaria (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        data_exibicao DATE UNIQUE NOT NULL,
+        conteudo TEXT NOT NULL
+    );
+";
+
+$db->exec($sql);
+echo "Tabelas criadas com sucesso!\n";
