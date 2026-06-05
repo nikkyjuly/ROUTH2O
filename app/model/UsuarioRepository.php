@@ -1,8 +1,5 @@
 <?php
 
-require_once __DIR__ . '/Database.php';
-require_once __DIR__ . '/IUsuarioRepository.php';
-
 class UsuarioRepository implements IUsuarioRepository
 {
     private PDO $db;
@@ -15,7 +12,7 @@ class UsuarioRepository implements IUsuarioRepository
     public function save(array $dados): bool
     {
         if (isset($dados['id'])) {
-            $stmt = $this->db->prepare("UPDATE Usuario SET nome = :nome, email = :email, objetivos = :obj, data_nascimento = :nasc, perfil = :perfil WHERE id = :id");
+            $stmt = $this->db->prepare("UPDATE Usuario SET nome = :nome, email = :email, objetivos = :obj, data_nascimento = :nasc, perfil = :perfil, bio = :bio WHERE id = :id");
             $params = [
                 ':id'     => $dados['id'],
                 ':nome'   => $dados['nome'],
@@ -26,7 +23,7 @@ class UsuarioRepository implements IUsuarioRepository
                 ':bio'    => $dados['bio'] ?? null
             ];
         } else {
-            $stmt = $this->db->prepare("INSERT INTO Usuario (nome, email, senha, perfil, objetivos, data_nascimento) VALUES (:nome, :email, :senha, :perfil, :obj, :nasc)");
+            $stmt = $this->db->prepare("INSERT INTO Usuario (nome, email, senha, perfil, objetivos, data_nascimento, bio) VALUES (:nome, :email, :senha, :perfil, :obj, :nasc, :bio)");
             $params = [
                 ':nome'   => $dados['nome'],
                 ':email'  => $dados['email'],

@@ -5,6 +5,11 @@
  * Responsabilidade: Regras de negócio de performance e hidratação.
  */
 
+/**
+ * Exceção customizada para regras de negócio.
+ */
+class BusinessRuleException extends Exception {}
+
 class Routh2oService
 {
     private IUsuarioRepository $repository;

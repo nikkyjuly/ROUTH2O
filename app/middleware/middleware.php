@@ -34,7 +34,8 @@ class Middleware
             session_start();
         }
         if (!isset($_SESSION['usuario_id'])) {
-            header('Location: index.html');
+            // Removida a barra inicial para manter consistência com o Router
+            header('Location: /view/index.html');
             exit;
         }
     }

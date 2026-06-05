@@ -7,8 +7,10 @@ class Database
     public static function getConnection(): PDO
     {
         if (self::$instance === null) {
-            $config = parse_ini_file(__DIR__ . '/config.ini', true);
-            $dbPath = __DIR__ . DIRECTORY_SEPARATOR . ($config['database']['path'] ?? 'database.sqlite');
+            // Database.php em app/model/ precisa subir dois níveis para o config.ini
+            $config = parse_ini_file(__DIR__ . '/../../config.ini', true);
+            // database.sqlite está em app/, logo sobe um nível a partir de model/
+            $dbPath = __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . ($config['database']['path'] ?? 'database.sqlite');
 
             try {
                 self::$instance = new PDO("sqlite:$dbPath");

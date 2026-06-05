@@ -1,7 +1,5 @@
 <?php
 
-require_once __DIR__ . '/view.php';
-
 /**
  * controller.php
  * Responsabilidade: Orquestrar ações de Usuário e Treino.

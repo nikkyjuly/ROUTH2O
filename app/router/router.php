@@ -1,8 +1,5 @@
 <?php
 
-require_once __DIR__ . '/middleware.php';
-require_once __DIR__ . '/view.php';
-
 /**
  * router.php
  * Responsabilidade: avaliar método HTTP e URL, direcionar ao destino correto.
@@ -10,6 +7,20 @@ require_once __DIR__ . '/view.php';
 
 class Router
 {
+    public function run(): bool
+    {
+        // Captura método HTTP e URI da requisição atual
+        $metodo = $_SERVER['REQUEST_METHOD'];
+        $uri    = $_SERVER['REQUEST_URI'];
+
+        // Injeção de Dependência (Container movido do index.php)
+        $repository = new UsuarioRepository();
+        $service    = new Routh2oService($repository);
+        $controller = new Routh2oController($repository, $service);
+
+        return $this->despachar($metodo, $uri, $controller);
+    }
+
     public function despachar(string $metodo, string $uri, Routh2oController $controller): bool
     {
         // Normaliza a URI (remove query string e trailing slash)
@@ -19,30 +30,38 @@ class Router
 
         // ── GET / → Redireciona para o HTML principal ─────────────────────
         if ($metodo === 'GET' && $caminho === '/') {
-            header('Location: index.html');
+            header('Location: /view/index.html');
             return true;
         }
 
         $middleware = new Middleware();
 
         // ── Proteção de Páginas HTML ─────────────────────────────────────
-        // Lista de páginas que exigem que o usuário esteja logado
+        // Incluímos as versões com e sem o prefixo /view/ para garantir segurança total
         $paginasProtegidas = [
             '/treino.html',
             '/perfil.html',
             '/relatorios.html',
-            '/atividade_dom.html'
+            '/atividade_dom.html',
+            '/view/treino.html',
+            '/view/perfil.html',
+            '/view/relatorios.html',
+            '/view/atividade_dom.html'
         ];
 
         if ($metodo === 'GET' && in_array($caminho, $paginasProtegidas)) {
-            $middleware->sessaoAtiva();
+            $middleware->sessaoAtiva(); 
         }
 
-        // Se o arquivo físico existir (CSS, JS, HTML), permite que o servidor entregue diretamente.
-        if ($caminho !== '/' && file_exists(__DIR__ . $caminho)) {
-            return false;
+        // Tenta encontrar o arquivo na raiz ou dentro da pasta /view automaticamente
+        $arquivoNaRaiz = __DIR__ . '/../../' . ltrim($caminho, '/');
+        $arquivoNaView = __DIR__ . '/../../view/' . ltrim($caminho, '/');
+
+        if ($caminho !== '/' && (file_exists($arquivoNaRaiz) || file_exists($arquivoNaView))) {
+            return false; // Deixa o PHP servir o arquivo estático (CSS, JS, etc)
         }
 
+        // Verifica se o arquivo físico existe (CSS, JS, Imagens, HTML)
         // ── Rotas de Autenticação e Perfil ────────────────────────────────
         if ($metodo === 'POST' && $caminho === '/login') {
             $controller->login($_POST);

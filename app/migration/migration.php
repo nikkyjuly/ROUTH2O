@@ -1,6 +1,7 @@
 <?php
 
-require_once __DIR__ . '/Database.php';
+// Carrega o autoloader a partir da raiz
+require_once __DIR__ . '/../../autoload.php';
 
 echo "Iniciando migração do banco de dados...\n";
 
