@@ -71,3 +71,9 @@ Abra o navegador e acesse: `http://localhost:8000`
 
 ---
 **Desenvolvido com foco em excelência arquitetural e bio-performance.**
+
+
+
+LINK DO VIDEO DA RECUPERAÇÃO
+
+https://youtu.be/eAHvyRPk0_w?is=l7KmZYH5sqtYJ1ue
